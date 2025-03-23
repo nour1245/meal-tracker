@@ -4,6 +4,7 @@ import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/controller/home_page_states.dart';
 import 'package:mealtracker/features/home/ui/widgets/add_new_meal_button.dart';
 import 'package:mealtracker/features/home/ui/widgets/meal_list.dart';
+import 'package:mealtracker/features/home/ui/widgets/sort_by_drop_down.dart';
 
 class AppHomeScreen extends StatelessWidget {
   const AppHomeScreen({super.key});
@@ -12,24 +13,22 @@ class AppHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: 
-        BlocConsumer<HomePageCubit, HomePageStates>(
-          listener: (context, state) {
-            
-          },
+        child: BlocConsumer<HomePageCubit, HomePageStates>(
+          listener: (context, state) {},
           buildWhen: (previous, current) {
             return current is HomePageLoading ||
                 current is HomePageSuccess ||
                 current is HomePageError;
           },
-         builder: (context, state) {
+          builder: (context, state) {
             return state.maybeWhen(
               homePageLoading: () {
                 return Center(child: CircularProgressIndicator());
               },
-              homePageSuccess: (meals) {
+              homePageSuccess: (meals, sortBy) {
                 return Column(
                   children: [
+                    SortByDropDown(sortBy: sortBy),
                     MealList(
                       listKey: context.read<HomePageCubit>().listKey,
                       meals: meals,
@@ -60,8 +59,7 @@ class AppHomeScreen extends StatelessWidget {
               },
             );
           },
-        )
-
+        ),
       ),
     );
   }

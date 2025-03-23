@@ -6,8 +6,8 @@ import 'package:mealtracker/features/home/data/meal_model.dart';
 
 class HomePageCubit extends Cubit<HomePageStates> {
   final listKey = GlobalKey<AnimatedListState>();
-
-   List<MealModel> meals =[];
+  SortBy currentSortBy = SortBy.none;
+  List<MealModel> meals = [];
   final TextEditingController mealNameController = TextEditingController();
   final TextEditingController mealCaloriesController = TextEditingController();
   final TextEditingController mealTimeController = TextEditingController();
@@ -15,39 +15,110 @@ class HomePageCubit extends Cubit<HomePageStates> {
 
   HomePageCubit() : super(HomePageStates.homePageLoading());
 
+  void updateSortBy(SortBy newSortBy) {
+    currentSortBy = newSortBy;
+    _sortMeals();
+    emit(HomePageSuccess(meals, currentSortBy));
+  }
+
+  void _sortMeals() {
+    switch (currentSortBy) {
+      case SortBy.name:
+        meals.sort((a, b) => a.name.compareTo(b.name));
+        break;
+      case SortBy.calories:
+        meals.sort((a, b) => a.calories.compareTo(b.calories));
+        break;
+      case SortBy.time:
+        meals.sort((a, b) => a.time.compareTo(b.time));
+        break;
+      case SortBy.none:
+        break;
+    }
+  }
+
   getSavedMeals() async {
     final box = await Hive.openBox('mealsList');
     emit(HomePageLoading());
     try {
-      final  mealsList = box.get("mealsList");
-       meals = (mealsList as List<dynamic>?)?.cast<MealModel>() ?? [];
-      emit(HomePageSuccess(meals));
+      final mealsList = box.get("mealsList");
+      meals = (mealsList as List<dynamic>?)?.cast<MealModel>() ?? [];
+      emit(HomePageSuccess(meals, currentSortBy));
     } catch (e) {
       emit(HomePageError("get meals error ${e.toString()}"));
     }
   }
 
   addNewMeal(context) async {
-    final box = await Hive.openBox('mealsList');
+  final box = await Hive.openBox('mealsList');
+  final newMeal = MealModel(
+    name: mealNameController.text,
+    calories: int.parse(mealCaloriesController.text),
+    time: mealTimeController.text,
+    photoPath: mealPhotoController.text,
+  );
 
-    // Add the new meal to the list
-    final newMeal = MealModel(
-      name: mealNameController.text,
-      calories: int.parse(mealCaloriesController.text),
-      time: mealTimeController.text,
-      photoPath: mealPhotoController.text,
-    );
-    final newIndex = meals.length;
-    meals.add(newMeal);
-    await box.put('mealsList', meals);
-    // Notify AnimatedList to insert the new item
-    listKey.currentState?.insertItem(newIndex);
-    // Clear controllers
-    mealNameController.clear();
-    mealCaloriesController.clear();
-    mealTimeController.clear();
-    mealPhotoController.clear();
-    // Close the bottom sheet
-    Navigator.pop(context);
+  // Determine insertion index
+  int newIndex = currentSortBy == SortBy.none 
+      ? meals.length 
+      : meals.indexWhere((meal) => _comparator(newMeal, meal) < 0);
+  newIndex = newIndex == -1 ? meals.length : newIndex;
+
+  // Insert and update
+  meals.insert(newIndex, newMeal);
+  await box.put('mealsList', meals);
+  listKey.currentState?.insertItem(newIndex);
+
+  // Reset fields
+  for (var c in [mealNameController, mealCaloriesController, mealTimeController, mealPhotoController]) {
+    c.clear();
+  }
+
+  emit(HomePageSuccess(meals, currentSortBy));
+  Navigator.pop(context);
+}
+
+// Comparator helper
+Comparator<MealModel> get _comparator {
+  switch (currentSortBy) {
+    case SortBy.name:   return (a, b) => a.name.compareTo(b.name);
+    case SortBy.calories: return (a, b) => a.calories.compareTo(b.calories);
+    case SortBy.time:   return (a, b) => a.time.compareTo(b.time);
+    default:            return (a, b) => 0;
   }
 }
+
+  deleteMeal(int index) async {
+    final box = await Hive.openBox('mealsList');
+    if (index < 0 || index >= meals.length) return;
+
+    try {
+      final removedMeal = meals.removeAt(index); // Remove from list first
+      await box.put('mealsList', meals); // Update storage
+
+      listKey.currentState?.removeItem(
+        index,
+        (context, animation) => SizeTransition(
+          sizeFactor: animation,
+          child: Card(
+            child: ListTile(
+              title: Text(removedMeal.name),
+              subtitle: Text(
+                '${removedMeal.calories} calories at ${removedMeal.time}',
+              ),
+              leading: Image.asset(removedMeal.photoPath),
+            ),
+          ),
+        ),
+      );
+
+      emit(
+        HomePageSuccess(List.from(meals), currentSortBy),
+      ); // Emit updated state
+    } catch (e) {
+      emit(HomePageError("Delete error: ${e.toString()}"));
+    }
+  }
+}
+
+enum SortBy { none, name, calories, time }

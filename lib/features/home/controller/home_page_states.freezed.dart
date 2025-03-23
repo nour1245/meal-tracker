@@ -20,7 +20,8 @@ mixin _$HomePageStates {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() homePageLoading,
-    required TResult Function(List<MealModel> meals) homePageSuccess,
+    required TResult Function(List<MealModel> meals, SortBy sortBy)
+        homePageSuccess,
     required TResult Function(String message) homePageError,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +29,7 @@ mixin _$HomePageStates {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? homePageLoading,
-    TResult? Function(List<MealModel> meals)? homePageSuccess,
+    TResult? Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult? Function(String message)? homePageError,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +37,7 @@ mixin _$HomePageStates {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? homePageLoading,
-    TResult Function(List<MealModel> meals)? homePageSuccess,
+    TResult Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult Function(String message)? homePageError,
     required TResult orElse(),
   }) =>
@@ -132,7 +133,8 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() homePageLoading,
-    required TResult Function(List<MealModel> meals) homePageSuccess,
+    required TResult Function(List<MealModel> meals, SortBy sortBy)
+        homePageSuccess,
     required TResult Function(String message) homePageError,
   }) {
     return initial();
@@ -143,7 +145,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? homePageLoading,
-    TResult? Function(List<MealModel> meals)? homePageSuccess,
+    TResult? Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult? Function(String message)? homePageError,
   }) {
     return initial?.call();
@@ -154,7 +156,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? homePageLoading,
-    TResult Function(List<MealModel> meals)? homePageSuccess,
+    TResult Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult Function(String message)? homePageError,
     required TResult orElse(),
   }) {
@@ -249,7 +251,8 @@ class _$HomePageLoadingImpl implements HomePageLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() homePageLoading,
-    required TResult Function(List<MealModel> meals) homePageSuccess,
+    required TResult Function(List<MealModel> meals, SortBy sortBy)
+        homePageSuccess,
     required TResult Function(String message) homePageError,
   }) {
     return homePageLoading();
@@ -260,7 +263,7 @@ class _$HomePageLoadingImpl implements HomePageLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? homePageLoading,
-    TResult? Function(List<MealModel> meals)? homePageSuccess,
+    TResult? Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult? Function(String message)? homePageError,
   }) {
     return homePageLoading?.call();
@@ -271,7 +274,7 @@ class _$HomePageLoadingImpl implements HomePageLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? homePageLoading,
-    TResult Function(List<MealModel> meals)? homePageSuccess,
+    TResult Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult Function(String message)? homePageError,
     required TResult orElse(),
   }) {
@@ -329,7 +332,7 @@ abstract class _$$HomePageSuccessImplCopyWith<$Res> {
           $Res Function(_$HomePageSuccessImpl) then) =
       __$$HomePageSuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<MealModel> meals});
+  $Res call({List<MealModel> meals, SortBy sortBy});
 }
 
 /// @nodoc
@@ -346,12 +349,17 @@ class __$$HomePageSuccessImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? meals = null,
+    Object? sortBy = freezed,
   }) {
     return _then(_$HomePageSuccessImpl(
       null == meals
           ? _value._meals
           : meals // ignore: cast_nullable_to_non_nullable
               as List<MealModel>,
+      freezed == sortBy
+          ? _value.sortBy
+          : sortBy // ignore: cast_nullable_to_non_nullable
+              as SortBy,
     ));
   }
 }
@@ -359,7 +367,8 @@ class __$$HomePageSuccessImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$HomePageSuccessImpl implements HomePageSuccess {
-  const _$HomePageSuccessImpl(final List<MealModel> meals) : _meals = meals;
+  const _$HomePageSuccessImpl(final List<MealModel> meals, this.sortBy)
+      : _meals = meals;
 
   final List<MealModel> _meals;
   @override
@@ -370,8 +379,11 @@ class _$HomePageSuccessImpl implements HomePageSuccess {
   }
 
   @override
+  final SortBy sortBy;
+
+  @override
   String toString() {
-    return 'HomePageStates.homePageSuccess(meals: $meals)';
+    return 'HomePageStates.homePageSuccess(meals: $meals, sortBy: $sortBy)';
   }
 
   @override
@@ -379,12 +391,15 @@ class _$HomePageSuccessImpl implements HomePageSuccess {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HomePageSuccessImpl &&
-            const DeepCollectionEquality().equals(other._meals, _meals));
+            const DeepCollectionEquality().equals(other._meals, _meals) &&
+            const DeepCollectionEquality().equals(other.sortBy, sortBy));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_meals));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_meals),
+      const DeepCollectionEquality().hash(sortBy));
 
   /// Create a copy of HomePageStates
   /// with the given fields replaced by the non-null parameter values.
@@ -400,10 +415,11 @@ class _$HomePageSuccessImpl implements HomePageSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() homePageLoading,
-    required TResult Function(List<MealModel> meals) homePageSuccess,
+    required TResult Function(List<MealModel> meals, SortBy sortBy)
+        homePageSuccess,
     required TResult Function(String message) homePageError,
   }) {
-    return homePageSuccess(meals);
+    return homePageSuccess(meals, sortBy);
   }
 
   @override
@@ -411,10 +427,10 @@ class _$HomePageSuccessImpl implements HomePageSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? homePageLoading,
-    TResult? Function(List<MealModel> meals)? homePageSuccess,
+    TResult? Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult? Function(String message)? homePageError,
   }) {
-    return homePageSuccess?.call(meals);
+    return homePageSuccess?.call(meals, sortBy);
   }
 
   @override
@@ -422,12 +438,12 @@ class _$HomePageSuccessImpl implements HomePageSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? homePageLoading,
-    TResult Function(List<MealModel> meals)? homePageSuccess,
+    TResult Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult Function(String message)? homePageError,
     required TResult orElse(),
   }) {
     if (homePageSuccess != null) {
-      return homePageSuccess(meals);
+      return homePageSuccess(meals, sortBy);
     }
     return orElse();
   }
@@ -471,10 +487,11 @@ class _$HomePageSuccessImpl implements HomePageSuccess {
 }
 
 abstract class HomePageSuccess implements HomePageStates {
-  const factory HomePageSuccess(final List<MealModel> meals) =
-      _$HomePageSuccessImpl;
+  const factory HomePageSuccess(
+      final List<MealModel> meals, final SortBy sortBy) = _$HomePageSuccessImpl;
 
   List<MealModel> get meals;
+  SortBy get sortBy;
 
   /// Create a copy of HomePageStates
   /// with the given fields replaced by the non-null parameter values.
@@ -553,7 +570,8 @@ class _$HomePageErrorImpl implements HomePageError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() homePageLoading,
-    required TResult Function(List<MealModel> meals) homePageSuccess,
+    required TResult Function(List<MealModel> meals, SortBy sortBy)
+        homePageSuccess,
     required TResult Function(String message) homePageError,
   }) {
     return homePageError(message);
@@ -564,7 +582,7 @@ class _$HomePageErrorImpl implements HomePageError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? homePageLoading,
-    TResult? Function(List<MealModel> meals)? homePageSuccess,
+    TResult? Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult? Function(String message)? homePageError,
   }) {
     return homePageError?.call(message);
@@ -575,7 +593,7 @@ class _$HomePageErrorImpl implements HomePageError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? homePageLoading,
-    TResult Function(List<MealModel> meals)? homePageSuccess,
+    TResult Function(List<MealModel> meals, SortBy sortBy)? homePageSuccess,
     TResult Function(String message)? homePageError,
     required TResult orElse(),
   }) {
