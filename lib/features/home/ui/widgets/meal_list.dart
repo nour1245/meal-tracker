@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mealtracker/core/theme/text_style.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 import 'package:mealtracker/features/home/ui/widgets/list_item.dart';
@@ -35,6 +36,7 @@ class MealList extends StatelessWidget {
 
     return Expanded(
       child: ListView.builder(
+        physics: BouncingScrollPhysics(),
         itemCount: sortedDates.length * 2, // Header + meals per date
         itemBuilder: (context, index) {
           if (index.isOdd) return const Divider(height: 0);
@@ -51,9 +53,11 @@ class MealList extends StatelessWidget {
               ListTile(
                 title: Text(
                   'Date: ${date.toLocal().toString().split(' ')[0]}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.mainText(
+                    context,
+                  ).copyWith(fontWeight: FontWeight.bold,fontSize: 18),
                 ),
-                subtitle: Text('Total Calories: $totalCalories'),
+                subtitle: Text('Total Calories: $totalCalories',style: AppTextStyle.mainText(context)),
               ),
               ...mealsOfDay.map((meal) {
                 int mealIndex = meals.indexOf(meal);

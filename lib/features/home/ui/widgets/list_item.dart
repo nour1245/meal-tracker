@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
@@ -14,7 +16,7 @@ class ListItem extends StatelessWidget {
       child: ListTile(
         title: Text(meal.name),
         subtitle: Text('${meal.calories} calories at ${meal.time}'),
-        leading: Image.asset(meal.photoPath),
+        leading: Image.file(File(meal.photoPath)),
         trailing: IconButton(
           icon: const Icon(Icons.delete, color: Colors.red),
           onPressed: () => context.read<HomePageCubit>().deleteMeal(index),

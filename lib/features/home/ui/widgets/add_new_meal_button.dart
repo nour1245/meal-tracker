@@ -18,11 +18,13 @@ class AddNewMealButton extends StatelessWidget {
   final TextEditingController mealTimeController;
   final TextEditingController mealPhotoController;
   final void Function()? onPressed;
+
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
+        Future.delayed(Duration(seconds: 1));
         addNewMealDialog(
           context,
           meals,
