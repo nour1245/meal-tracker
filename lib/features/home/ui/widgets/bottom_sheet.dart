@@ -5,7 +5,6 @@ import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 void addNewMealDialog(
   BuildContext context,
   meals,
-  listKey,
   mealNameController,
   mealCaloriesController,
   mealTimeController,

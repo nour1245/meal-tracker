@@ -13,8 +13,7 @@ class AppHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocConsumer<HomePageCubit, HomePageStates>(
-          listener: (context, state) {},
+        child: BlocBuilder<HomePageCubit, HomePageStates>(
           buildWhen: (previous, current) {
             return current is HomePageLoading ||
                 current is HomePageSuccess ||
@@ -29,12 +28,19 @@ class AppHomeScreen extends StatelessWidget {
                 return Column(
                   children: [
                     SortByDropDown(sortBy: sortBy),
-                    MealList(
-                      listKey: context.read<HomePageCubit>().listKey,
-                      meals: meals,
-                    ),
+                    meals.isEmpty
+                        ? Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/images/add_data.jpg"),
+                              Text("No Meals Yet!! Add Meals Now")
+                              ],
+                          ),
+                        )
+                        : MealList(meals: meals),
                     AddNewMealButton(
-                      listKey: context.read<HomePageCubit>().listKey,
                       meals: meals,
                       mealNameController:
                           context.read<HomePageCubit>().mealNameController,

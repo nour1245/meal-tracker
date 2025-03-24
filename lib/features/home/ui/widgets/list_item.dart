@@ -4,23 +4,20 @@ import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key, required this.meals, required this.index});
-  final List<MealModel> meals;
+  const ListItem({super.key, required this.meal, required this.index});
+  final MealModel meal;
   final int index;
+
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(meals[index].name),
-        subtitle: Text(
-          '${meals[index].calories} calories at ${meals[index].time}',
-        ),
-        leading: Image.asset(meals[index].photoPath),
+        title: Text(meal.name),
+        subtitle: Text('${meal.calories} calories at ${meal.time}'),
+        leading: Image.asset(meal.photoPath),
         trailing: IconButton(
-          icon: Icon(Icons.delete, color: Colors.red),
-          onPressed: () {
-            context.read<HomePageCubit>().deleteMeal(index);
-          },
+          icon: const Icon(Icons.delete, color: Colors.red),
+          onPressed: () => context.read<HomePageCubit>().deleteMeal(index),
         ),
       ),
     );

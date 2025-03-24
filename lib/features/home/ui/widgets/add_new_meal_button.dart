@@ -5,7 +5,6 @@ import 'package:mealtracker/features/home/ui/widgets/bottom_sheet.dart';
 class AddNewMealButton extends StatelessWidget {
   const AddNewMealButton({
     super.key,
-    required this.listKey,
     required this.meals,
     required this.mealNameController,
     required this.mealCaloriesController,
@@ -13,7 +12,6 @@ class AddNewMealButton extends StatelessWidget {
     required this.mealPhotoController,
     required this.onPressed,
   });
-  final GlobalKey listKey;
   final List<MealModel> meals;
   final TextEditingController mealNameController;
   final TextEditingController mealCaloriesController;
@@ -28,7 +26,6 @@ class AddNewMealButton extends StatelessWidget {
         addNewMealDialog(
           context,
           meals,
-          listKey,
           mealNameController,
           mealCaloriesController,
           mealTimeController,

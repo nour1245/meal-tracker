@@ -5,7 +5,6 @@ import 'package:mealtracker/features/home/controller/home_page_states.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 
 class HomePageCubit extends Cubit<HomePageStates> {
-  final listKey = GlobalKey<AnimatedListState>();
   SortBy currentSortBy = SortBy.none;
   List<MealModel> meals = [];
   final TextEditingController mealNameController = TextEditingController();
@@ -50,70 +49,69 @@ class HomePageCubit extends Cubit<HomePageStates> {
   }
 
   addNewMeal(context) async {
-  final box = await Hive.openBox('mealsList');
-  final newMeal = MealModel(
-    name: mealNameController.text,
-    calories: int.parse(mealCaloriesController.text),
-    time: mealTimeController.text,
-    photoPath: mealPhotoController.text,
-  );
+    final box = await Hive.openBox('mealsList');
+    final newMeal = MealModel(
+      name: mealNameController.text,
+      calories: int.parse(mealCaloriesController.text),
+      time: mealTimeController.text,
+      photoPath: mealPhotoController.text,
+    );
+    // Create a new list to ensure reference changes
+    List<MealModel> newMeals = List.from(meals);
 
-  // Determine insertion index
-  int newIndex = currentSortBy == SortBy.none 
-      ? meals.length 
-      : meals.indexWhere((meal) => _comparator(newMeal, meal) < 0);
-  newIndex = newIndex == -1 ? meals.length : newIndex;
+    // Determine insertion index
+    int newIndex =
+        currentSortBy == SortBy.none
+            ? newMeals.length
+            : newMeals.indexWhere((meal) => _comparator(newMeal, meal) < 0);
+    newIndex = newIndex == -1 ? meals.length : newIndex;
 
-  // Insert and update
-  meals.insert(newIndex, newMeal);
-  await box.put('mealsList', meals);
-  listKey.currentState?.insertItem(newIndex);
+    // Insert and update
+    newMeals.insert(newIndex, newMeal);
+    meals = newMeals;
+    await box.put('mealsList', meals);
 
-  // Reset fields
-  for (var c in [mealNameController, mealCaloriesController, mealTimeController, mealPhotoController]) {
-    c.clear();
+    // Reset fields
+    for (var c in [
+      mealNameController,
+      mealCaloriesController,
+      mealTimeController,
+      mealPhotoController,
+    ]) {
+      c.clear();
+    }
+
+    emit(HomePageSuccess(meals, currentSortBy));
+    Navigator.pop(context);
   }
 
-  emit(HomePageSuccess(meals, currentSortBy));
-  Navigator.pop(context);
-}
-
-// Comparator helper
-Comparator<MealModel> get _comparator {
-  switch (currentSortBy) {
-    case SortBy.name:   return (a, b) => a.name.compareTo(b.name);
-    case SortBy.calories: return (a, b) => a.calories.compareTo(b.calories);
-    case SortBy.time:   return (a, b) => a.time.compareTo(b.time);
-    default:            return (a, b) => 0;
+  // Comparator helper
+  Comparator<MealModel> get _comparator {
+    switch (currentSortBy) {
+      case SortBy.name:
+        return (a, b) => a.name.compareTo(b.name);
+      case SortBy.calories:
+        return (a, b) => a.calories.compareTo(b.calories);
+      case SortBy.time:
+        return (a, b) => a.time.compareTo(b.time);
+      default:
+        return (a, b) => 0;
+    }
   }
-}
 
   deleteMeal(int index) async {
     final box = await Hive.openBox('mealsList');
     if (index < 0 || index >= meals.length) return;
 
     try {
-      final removedMeal = meals.removeAt(index); // Remove from list first
+      List<MealModel> newMeals = List.from(meals);
+
+      newMeals.removeAt(index); // Remove from list first
+      meals=newMeals;
       await box.put('mealsList', meals); // Update storage
 
-      listKey.currentState?.removeItem(
-        index,
-        (context, animation) => SizeTransition(
-          sizeFactor: animation,
-          child: Card(
-            child: ListTile(
-              title: Text(removedMeal.name),
-              subtitle: Text(
-                '${removedMeal.calories} calories at ${removedMeal.time}',
-              ),
-              leading: Image.asset(removedMeal.photoPath),
-            ),
-          ),
-        ),
-      );
-
       emit(
-        HomePageSuccess(List.from(meals), currentSortBy),
+        HomePageSuccess(meals, currentSortBy),
       ); // Emit updated state
     } catch (e) {
       emit(HomePageError("Delete error: ${e.toString()}"));
