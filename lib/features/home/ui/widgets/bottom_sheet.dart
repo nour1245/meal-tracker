@@ -8,7 +8,7 @@ import 'package:mealtracker/features/home/methods/pick_image.dart';
 
 void addNewMealDialog(
   BuildContext context,
-  
+
   mealNameController,
   mealCaloriesController,
   mealTimeController,
@@ -19,59 +19,75 @@ void addNewMealDialog(
 
   showModalBottomSheet(
     isScrollControlled: true,
+    useSafeArea: true,
     backgroundColor: Colors.blueGrey,
     context: context,
     builder: (context) {
-      return SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                mealName(mealNameController),
-                SizedBox(height: 10.h),
-                mealCalories(mealCaloriesController),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    pickDate(context, mealTimeController),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        mealTimeController.text.isEmpty
-                            ? 'No date & time selected'
-                            : mealTimeController.text,
-                        overflow: TextOverflow.ellipsis,
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  mealName(mealNameController),
+                  SizedBox(height: 10.h),
+                  mealCalories(mealCaloriesController),
+                  SizedBox(height: 10.h),
+                  Row(
+                    children: [
+                      pickDate(context, mealTimeController),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: ValueListenableBuilder(
+                          builder: (context, value, child) {
+                            return Text(
+                              mealTimeController.text.isEmpty
+                                  ? 'No date & time selected'
+                                  : mealTimeController.text,
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          },
+                          valueListenable: mealTimeController,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                Row(
-                  children: [
-                    pickImage(mealPhotoController),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        mealPhotoController.text.isEmpty
-                            ? 'No image selected'
-                            : 'Image selected',
-                        overflow: TextOverflow.ellipsis,
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
+                  Row(
+                    children: [
+                      pickImage(mealPhotoController),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: ValueListenableBuilder(
+                          builder: (context, value, child) {
+                            return Text(
+                              mealPhotoController.text.isEmpty
+                                  ? 'No image selected'
+                                  : 'Image selected',
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          },
+                          valueListenable: mealPhotoController,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 50.h),
-                addMealButton(
-                  _formKey,
-                  mealTimeController,
-                  context,
-                  mealPhotoController,
-                  onPressed,
-                ),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 50.h),
+                  addMealButton(
+                    _formKey,
+                    mealTimeController,
+                    context,
+                    mealPhotoController,
+                    onPressed,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
