@@ -23,7 +23,14 @@ The app features a visually appealing interface with shimmer loading effects and
 - **flutter_screenutil**: Screen size adaptation and responsive design
 - **shimmer**: Loading animation effects
 
+## Demo
 
+| Screens        | Screens               
+| ------------- |:--------------------------:
+|![image1](https://i.imgur.com/ciUkimB.png)|![image2](https://i.imgur.com/wkldN8u.png) 
+|![image8](https://i.imgur.com/2EVmskH.png)|![image3](https://i.imgur.com/lwGI2tH.png)
+|![image5](https://i.imgur.com/Xe285Qn.png)|![image4](https://i.imgur.com/HFGTyOf.png) 
+|![image6](https://i.imgur.com/hUZYLqc.png)|![image7](https://i.imgur.com/paVG4MP.png) 
 ## How to Run the App
 
 ### Prerequisites
