@@ -1,10 +1,10 @@
 # Meal Tracker
 
-Meal Tracker is a Flutter-based mobile application that helps users track their meals by recording meal names, calorie counts, times, and photos. The app features a clean UI with sorting capabilities, local storage using Hive, and a responsive design suitable for various screen sizes.
+Meal Tracker is a Flutter-based mobile application that helps users track their meals by recording meal names, calorie counts, times, and photos. The app features a clean UI with sorting capabilities, local storage using Hive, and a responsive design suitable for various screen sizes. This project supports multiple flavors for different build configurations.
 
 ## Introduction
 
-This project demonstrates a modern Flutter application architecture using BLoC pattern for state management, Hive for local persistence, and Flutter ScreenUtil for responsive design. Users can:
+This project demonstrates a modern Flutter application architecture using BLoC pattern for state management, Hive for local persistence, and Flutter ScreenUtil for responsive design. It includes flavor support for different environments/configurations. Users can:
 - Add new meals with details (name, calories, time, photo)
 - View meal history grouped by date
 - Sort meals by name, calories, or time
@@ -23,6 +23,7 @@ The app features a visually appealing interface with shimmer loading effects and
 - **flutter_screenutil**: Screen size adaptation and responsive design
 - **shimmer**: Loading animation effects
 
+
 ## How to Run the App
 
 ### Prerequisites
@@ -30,6 +31,11 @@ The app features a visually appealing interface with shimmer loading effects and
 - Dart SDK (comes with Flutter)
 - Android Studio/Xcode for emulator/simulator
 - Git
+
+### Flavors
+The app supports multiple flavors:
+- **prod**:Production- Basic setup with default configuration
+- **dev**: for development- Includes BLoC observer for debugging,etc...
 
 ### Setup Steps
 1. **Clone the Repository**
@@ -50,10 +56,50 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 4. **Run the App**
 - Connect a device or start an emulator/simulator
-- Run the app:
+- Run with specific flavor:
 ```bash
-flutter run
+# Development flavor
+flutter run --flavor dev -t lib/main.dart
+
+# Production flavor (with BLoC observer)
+flutter run --flavor prod -t lib/main_prod.dart
 ```
+
+5. **Build for Release**
+```bash
+# Development APK
+flutter build apk --flavor dev -t lib/main.dart
+
+# Production APK
+flutter build apk --flavor prod -t lib/main_prod.dart
+
+```
+
+### Flavor Configuration
+Add the following to your `android/app/build.gradle`:
+```gradle
+flavorDimensions += "default"
+    productFlavors {
+        create("dev") {
+            dimension = "default"
+            resValue(
+                type = "string",
+                name = "app_name",
+                value = "Meal Tracker Dev")
+            applicationIdSuffix = ".dev"
+        }
+        create("prod") {
+            dimension = "default"
+            resValue(
+                type = "string",
+                name = "app_name",
+                value = "Meal Tracker prod")
+            applicationIdSuffix = ".prod"
+        }
+    }
+```
+
+For iOS, configure schemes in Xcode with corresponding bundle identifiers.
 
 ### Troubleshooting
 - If you encounter build issues, try:
