@@ -7,9 +7,9 @@ import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key, required this.meal, required this.index});
+  const ListItem({super.key, required this.meal, required this.listItem});
   final MealModel meal;
-  final int index;
+  final String listItem;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ListItem extends StatelessWidget {
         leading: Image.file(File(meal.photoPath)),
         trailing: IconButton(
           icon: const Icon(Icons.delete, color: Colors.redAccent),
-          onPressed: () => context.read<HomePageCubit>().deleteMeal(index),
+          onPressed: () => context.read<HomePageCubit>().deleteMeal(listItem),
         ),
       ),
     );

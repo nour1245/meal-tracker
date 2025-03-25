@@ -46,7 +46,7 @@ class MealList extends StatelessWidget {
               ),
               ...mealsOfDay.map((meal) {
                 int mealIndex = mealsOfDay.indexOf(meal);
-                return ListItem(meal: meal, index: mealIndex);
+                return ListItem(meal: meal, listItem: meal.id);
               }),
             ],
           );
