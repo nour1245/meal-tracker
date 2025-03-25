@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mealtracker/core/theme/text_style.dart';
+import 'package:mealtracker/core/constants/images.dart';
+import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/controller/home_page_states.dart';
 import 'package:mealtracker/features/home/ui/widgets/add_new_meal_button.dart';
 import 'package:mealtracker/features/home/ui/widgets/meal_list.dart';
+import 'package:mealtracker/features/home/ui/widgets/shimmer_loading.dart';
 import 'package:mealtracker/features/home/ui/widgets/sort_by_drop_down.dart';
 
-class AppHomeScreen extends StatelessWidget {
+class AppHomeScreen extends StatefulWidget {
   const AppHomeScreen({super.key});
 
   @override
+  State<AppHomeScreen> createState() => _AppHomeScreenState();
+}
+
+class _AppHomeScreenState extends State<AppHomeScreen> {
+  @override
   Widget build(BuildContext context) {
+    precacheImage(const AssetImage(ImagesConst.backGroundImage), context);
     return Scaffold(
+      floatingActionButton: floatingButtonMethod(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+
       body: Container(
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage("assets/images/app_back_ground.jpg"),
+            image: AssetImage(ImagesConst.backGroundImage),
           ),
         ),
         child: SafeArea(
@@ -32,43 +43,15 @@ class AppHomeScreen extends StatelessWidget {
             builder: (context, state) {
               return state.maybeWhen(
                 homePageLoading: () {
-                  return Center(child: CircularProgressIndicator());
+                  return ShimmerMealList();
                 },
                 homePageSuccess: (meals, sortBy) {
                   return Column(
                     children: [
                       SortByDropDown(sortBy: sortBy),
                       meals.isEmpty
-                          ? Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset("assets/images/add_data.png"),
-                                Text(
-                                  "No Meals Yet!! Add Meals Now",
-                                  style: AppTextStyle.mainText(context),
-                                ),
-                              ],
-                            ),
-                          )
+                          ? emptyListCase(context)
                           : MealList(meals: meals),
-                      AddNewMealButton(
-                        meals: meals,
-                        mealNameController:
-                            context.read<HomePageCubit>().mealNameController,
-                        mealCaloriesController:
-                            context
-                                .read<HomePageCubit>()
-                                .mealCaloriesController,
-                        mealTimeController:
-                            context.read<HomePageCubit>().mealTimeController,
-                        mealPhotoController:
-                            context.read<HomePageCubit>().mealPhotoController,
-                        onPressed: () {
-                          context.read<HomePageCubit>().addNewMeal(context);
-                        },
-                      ),
                     ],
                   );
                 },
@@ -83,6 +66,35 @@ class AppHomeScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Expanded emptyListCase(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(ImagesConst.noMealsImage),
+          Text(
+            "No Meals Yet!! Add Meals Now",
+            style: AppTextStyle.mainText(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  AddNewMealButton floatingButtonMethod(BuildContext context) {
+    return AddNewMealButton(
+      mealNameController: context.read<HomePageCubit>().mealNameController,
+      mealCaloriesController:
+          context.read<HomePageCubit>().mealCaloriesController,
+      mealTimeController: context.read<HomePageCubit>().mealTimeController,
+      mealPhotoController: context.read<HomePageCubit>().mealPhotoController,
+      onPressed: () {
+        context.read<HomePageCubit>().addNewMeal(context);
+      },
     );
   }
 }

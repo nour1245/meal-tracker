@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mealtracker/core/theme/text_style.dart';
+import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 import 'package:mealtracker/features/home/ui/widgets/list_item.dart';
