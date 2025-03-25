@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/features/home/ui/widgets/bottom_sheet.dart';
 
 class AddNewMealButton extends StatelessWidget {
@@ -19,6 +20,7 @@ class AddNewMealButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      backgroundColor: ColorsManger.primary,
       child: Icon(Icons.add),
       onPressed: () {
         Future.delayed(Duration(seconds: 1));

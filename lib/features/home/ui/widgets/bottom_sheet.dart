@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/features/home/methods/add_meal_button.dart';
 import 'package:mealtracker/features/home/methods/meal_calories.dart';
 import 'package:mealtracker/features/home/methods/meal_name.dart';
@@ -20,7 +21,7 @@ void addNewMealDialog(
   showModalBottomSheet(
     isScrollControlled: true,
     useSafeArea: true,
-    backgroundColor: Colors.blueGrey,
+    backgroundColor: ColorsManger.primary,
     context: context,
     builder: (context) {
       return Padding(
