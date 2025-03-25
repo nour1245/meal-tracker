@@ -21,13 +21,14 @@ class MealModelAdapter extends TypeAdapter<MealModel> {
       calories: fields[1] as int,
       time: fields[2] as String,
       photoPath: fields[3] as String,
+      id: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, MealModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class MealModelAdapter extends TypeAdapter<MealModel> {
       ..writeByte(2)
       ..write(obj.time)
       ..writeByte(3)
-      ..write(obj.photoPath);
+      ..write(obj.photoPath)
+      ..writeByte(4)
+      ..write(obj.id);
   }
 
   @override

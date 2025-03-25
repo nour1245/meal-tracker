@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:mealtracker/features/home/controller/home_page_states.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
+import 'package:uuid/uuid.dart';
 
 enum SortBy { none, name, calories, time }
 
@@ -109,12 +110,10 @@ class HomePageCubit extends Cubit<HomePageStates> {
     }
   }
 
-  Future<void> deleteMeal(int index) async {
-    if (index < 0 || index >= meals.length) return;
-
+  Future<void> deleteMeal(String mealId) async {
     try {
       final box = await Hive.openBox('mealsList');
-      final updatedMeals = List<MealModel>.from(meals)..removeAt(index);
+      final updatedMeals = List<MealModel>.from(meals)..removeWhere((meal) =>  meal.id == mealId,);
 
       await box.put('mealsList', updatedMeals);
       meals = updatedMeals;
@@ -132,6 +131,7 @@ class HomePageCubit extends Cubit<HomePageStates> {
 
   // Helper Methods
   MealModel _createNewMeal() => MealModel(
+    id: const Uuid().v4(),
     name: mealNameController.text,
     calories: int.parse(mealCaloriesController.text),
     time: mealTimeController.text,
