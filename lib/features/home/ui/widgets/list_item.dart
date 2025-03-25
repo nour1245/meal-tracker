@@ -14,13 +14,13 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: ColorsManger.secondary,
+      color: ColorsManger.primary,
       child: ListTile(
         title: Text(meal.name),
         subtitle: Text('${meal.calories} calories at ${meal.time}'),
         leading: Image.file(File(meal.photoPath)),
         trailing: IconButton(
-          icon: const Icon(Icons.delete, color: ColorsManger.primary),
+          icon: const Icon(Icons.delete, color: Colors.redAccent),
           onPressed: () => context.read<HomePageCubit>().deleteMeal(index),
         ),
       ),

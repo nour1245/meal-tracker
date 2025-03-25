@@ -66,7 +66,18 @@ class _AppHomeScreenState extends State<AppHomeScreen> {
                         homePageSuccess: (meals, sortBy) {
                           return Column(
                             children: [
-                              SortByDropDown(sortBy: sortBy),
+                              Row(
+                                children: [
+                                  Spacer(),
+                                  Text(
+                                    "SortBy",
+                                    style: AppTextStyle.mainText(
+                                      context,
+                                    ).copyWith(color: Colors.red),
+                                  ),
+                                  SortByDropDown(sortBy: sortBy),
+                                ],
+                              ),
                               meals.isEmpty
                                   ? emptyListCase(context)
                                   : MealList(meals: meals),
