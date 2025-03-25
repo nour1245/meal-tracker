@@ -4,20 +4,28 @@ import 'package:hive/hive.dart';
 import 'package:mealtracker/features/home/controller/home_page_states.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 
+enum SortBy { none, name, calories, time }
+
 class HomePageCubit extends Cubit<HomePageStates> {
+  // Controllers
+  final mealNameController = TextEditingController();
+  final mealCaloriesController = TextEditingController();
+  final mealTimeController = TextEditingController();
+  final mealPhotoController = TextEditingController();
+
+  // State variables
   SortBy currentSortBy = SortBy.none;
   List<MealModel> meals = [];
-  final TextEditingController mealNameController = TextEditingController();
-  final TextEditingController mealCaloriesController = TextEditingController();
-  final TextEditingController mealTimeController = TextEditingController();
-  final TextEditingController mealPhotoController = TextEditingController();
 
-  HomePageCubit() : super(HomePageStates.homePageLoading());
+  HomePageCubit() : super(const HomePageStates.initial()) {
+    getSavedMeals();
+  }
 
+  // Sorting Methods
   void updateSortBy(SortBy newSortBy) {
     currentSortBy = newSortBy;
     _sortMeals();
-    emit(HomePageSuccess(meals, currentSortBy));
+    emit(HomePageStates.homePageSuccess(meals, currentSortBy));
   }
 
   void _sortMeals() {
@@ -36,57 +44,75 @@ class HomePageCubit extends Cubit<HomePageStates> {
     }
   }
 
-  getSavedMeals() async {
-    final box = await Hive.openBox('mealsList');
-    emit(HomePageLoading());
+  // Data Operations
+  Future<void> getSavedMeals() async {
+    emit(const HomePageStates.homePageLoading());
     try {
+      final box = await Hive.openBox('mealsList');
       final mealsList = box.get("mealsList");
       meals = (mealsList as List<dynamic>?)?.cast<MealModel>() ?? [];
-      emit(HomePageSuccess(meals, currentSortBy));
+      _sortMeals();
+      emit(HomePageStates.homePageSuccess(meals, currentSortBy));
     } catch (e) {
-      emit(HomePageError("get meals error ${e.toString()}"));
+      emit(HomePageStates.homePageError("Failed to load meals: ${e.toString()}"));
     }
   }
 
-  addNewMeal(context) async {
-    final box = await Hive.openBox('mealsList');
-    final newMeal = MealModel(
-      name: mealNameController.text,
-      calories: int.parse(mealCaloriesController.text),
-      time: mealTimeController.text,
-      photoPath: mealPhotoController.text,
+  Future<void> addNewMeal(BuildContext context) async {
+    try {
+      final box = await Hive.openBox('mealsList');
+      final newMeal = _createNewMeal();
+      final updatedMeals = _insertMealSorted(newMeal);
+      
+      await box.put('mealsList', updatedMeals);
+      meals = updatedMeals;
+      _clearControllers();
+      
+      emit(HomePageStates.homePageSuccess(meals, currentSortBy));
+      Navigator.pop(context);
+    } catch (e) {
+      emit(HomePageStates.homePageError("Failed to add meal: ${e.toString()}"));
+    }
+  }
+
+  Future<void> deleteMeal(int index) async {
+    if (index < 0 || index >= meals.length) return;
+
+    try {
+      final box = await Hive.openBox('mealsList');
+      final updatedMeals = List<MealModel>.from(meals)..removeAt(index);
+      
+      await box.put('mealsList', updatedMeals);
+      meals = updatedMeals;
+      emit(HomePageStates.homePageSuccess(meals, currentSortBy));
+    } catch (e) {
+      emit(HomePageStates.homePageError("Failed to delete meal: ${e.toString()}"));
+    }
+  }
+
+  // Helper Methods
+  MealModel _createNewMeal() => MealModel(
+        name: mealNameController.text,
+        calories: int.parse(mealCaloriesController.text),
+        time: mealTimeController.text,
+        photoPath: mealPhotoController.text,
+      );
+
+  List<MealModel> _insertMealSorted(MealModel newMeal) {
+    final updatedMeals = List<MealModel>.from(meals);
+    final comparator = _getComparator();
+    final insertIndex = currentSortBy == SortBy.none
+        ? updatedMeals.length
+        : updatedMeals.indexWhere((meal) => comparator(newMeal, meal) < 0);
+    
+    updatedMeals.insert(
+      insertIndex == -1 ? updatedMeals.length : insertIndex,
+      newMeal,
     );
-    // Create a new list to ensure reference changes
-    List<MealModel> newMeals = List.from(meals);
-
-    // Determine insertion index
-    int newIndex =
-        currentSortBy == SortBy.none
-            ? newMeals.length
-            : newMeals.indexWhere((meal) => _comparator(newMeal, meal) < 0);
-    newIndex = newIndex == -1 ? meals.length : newIndex;
-
-    // Insert and update
-    newMeals.insert(newIndex, newMeal);
-    meals = newMeals;
-    await box.put('mealsList', meals);
-
-    // Reset fields
-    for (var c in [
-      mealNameController,
-      mealCaloriesController,
-      mealTimeController,
-      mealPhotoController,
-    ]) {
-      c.clear();
-    }
-
-    emit(HomePageSuccess(meals, currentSortBy));
-    Navigator.pop(context);
+    return updatedMeals;
   }
 
-  // Comparator helper
-  Comparator<MealModel> get _comparator {
+  Comparator<MealModel> _getComparator() {
     switch (currentSortBy) {
       case SortBy.name:
         return (a, b) => a.name.compareTo(b.name);
@@ -94,29 +120,32 @@ class HomePageCubit extends Cubit<HomePageStates> {
         return (a, b) => a.calories.compareTo(b.calories);
       case SortBy.time:
         return (a, b) => a.time.compareTo(b.time);
-      default:
+      case SortBy.none:
         return (a, b) => 0;
     }
   }
 
-  deleteMeal(int index) async {
-    final box = await Hive.openBox('mealsList');
-    if (index < 0 || index >= meals.length) return;
-
-    try {
-      List<MealModel> newMeals = List.from(meals);
-
-      newMeals.removeAt(index); // Remove from list first
-      meals=newMeals;
-      await box.put('mealsList', meals); // Update storage
-
-      emit(
-        HomePageSuccess(meals, currentSortBy),
-      ); // Emit updated state
-    } catch (e) {
-      emit(HomePageError("Delete error: ${e.toString()}"));
+  void _clearControllers() {
+    for (final controller in [
+      mealNameController,
+      mealCaloriesController,
+      mealTimeController,
+      mealPhotoController,
+    ]) {
+      controller.clear();
     }
   }
-}
 
-enum SortBy { none, name, calories, time }
+  @override
+  Future<void> close() {
+    for (final controller in [
+      mealNameController,
+      mealCaloriesController,
+      mealTimeController,
+      mealPhotoController,
+    ]) {
+      controller.dispose();
+    }
+    return super.close();
+  }
+}
