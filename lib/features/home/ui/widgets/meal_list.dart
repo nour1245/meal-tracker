@@ -41,7 +41,7 @@ class MealList extends StatelessWidget {
         itemCount: sortedDates.length * 2, // Header + meals per date
         itemBuilder: (context, index) {
           if (index.isOdd) {
-            return const Divider(height: 0, color: ColorsManger.secondary);
+            return const Divider(height: 0, color: ColorsManger.primary);
           }
           final groupIndex = index ~/ 2;
           final date = sortedDates[groupIndex];
