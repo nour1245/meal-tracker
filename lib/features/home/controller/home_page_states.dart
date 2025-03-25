@@ -8,7 +8,11 @@ part 'home_page_states.freezed.dart';
 class HomePageStates with _$HomePageStates {
   const factory HomePageStates.initial() = _Initial;
   const factory HomePageStates.homePageLoading() = HomePageLoading;
-  const factory HomePageStates.homePageSuccess(List<MealModel> meals,SortBy sortBy) =
-      HomePageSuccess;
+  const factory HomePageStates.homePageSuccess(
+    List<MealModel> meals,
+    SortBy sortBy,
+    Map<DateTime, List<MealModel>> groupedMeals,
+    List<DateTime> sortedDates,
+  ) = HomePageSuccess;
   const factory HomePageStates.homePageError(String message) = HomePageError;
 }

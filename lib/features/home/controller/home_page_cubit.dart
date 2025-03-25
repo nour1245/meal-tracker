@@ -25,7 +25,9 @@ class HomePageCubit extends Cubit<HomePageStates> {
   void updateSortBy(SortBy newSortBy) {
     currentSortBy = newSortBy;
     _sortMeals();
-    emit(HomePageStates.homePageSuccess(meals, currentSortBy));
+    final (grouped, sorted) = _groupAndSortMeals();
+
+    emit(HomePageStates.homePageSuccess(meals, currentSortBy, grouped, sorted));
   }
 
   void _sortMeals() {
@@ -44,6 +46,29 @@ class HomePageCubit extends Cubit<HomePageStates> {
     }
   }
 
+  //
+  (Map<DateTime, List<MealModel>>, List<DateTime>) _groupAndSortMeals() {
+    Map<DateTime, List<MealModel>> groupedMeals = {};
+    for (var meal in meals) {
+      try {
+        DateTime date = DateTime.parse(meal.time);
+        DateTime dateOnly = DateTime(date.year, date.month, date.day);
+        groupedMeals.putIfAbsent(dateOnly, () => []).add(meal);
+      } catch (e) {
+        print('Error parsing date: $e');
+      }
+    }
+
+    var sortedDates =
+        groupedMeals.keys.toList()..sort(
+          currentSortBy == SortBy.time
+              ? (a, b) => b.compareTo(a)
+              : (a, b) => a.compareTo(b),
+        );
+
+    return (groupedMeals, sortedDates);
+  }
+
   // Data Operations
   Future<void> getSavedMeals() async {
     emit(const HomePageStates.homePageLoading());
@@ -52,9 +77,15 @@ class HomePageCubit extends Cubit<HomePageStates> {
       final mealsList = box.get("mealsList");
       meals = (mealsList as List<dynamic>?)?.cast<MealModel>() ?? [];
       _sortMeals();
-      emit(HomePageStates.homePageSuccess(meals, currentSortBy));
+      final (grouped, sorted) = _groupAndSortMeals();
+
+      emit(
+        HomePageStates.homePageSuccess(meals, currentSortBy, grouped, sorted),
+      );
     } catch (e) {
-      emit(HomePageStates.homePageError("Failed to load meals: ${e.toString()}"));
+      emit(
+        HomePageStates.homePageError("Failed to load meals: ${e.toString()}"),
+      );
     }
   }
 
@@ -63,12 +94,15 @@ class HomePageCubit extends Cubit<HomePageStates> {
       final box = await Hive.openBox('mealsList');
       final newMeal = _createNewMeal();
       final updatedMeals = _insertMealSorted(newMeal);
-      
+
       await box.put('mealsList', updatedMeals);
       meals = updatedMeals;
       _clearControllers();
-      
-      emit(HomePageStates.homePageSuccess(meals, currentSortBy));
+
+      final (grouped, sorted) = _groupAndSortMeals();
+      emit(
+        HomePageStates.homePageSuccess(meals, currentSortBy, grouped, sorted),
+      );
       Navigator.pop(context);
     } catch (e) {
       emit(HomePageStates.homePageError("Failed to add meal: ${e.toString()}"));
@@ -81,30 +115,37 @@ class HomePageCubit extends Cubit<HomePageStates> {
     try {
       final box = await Hive.openBox('mealsList');
       final updatedMeals = List<MealModel>.from(meals)..removeAt(index);
-      
+
       await box.put('mealsList', updatedMeals);
       meals = updatedMeals;
-      emit(HomePageStates.homePageSuccess(meals, currentSortBy));
+
+      final (grouped, sorted) = _groupAndSortMeals();
+      emit(
+        HomePageStates.homePageSuccess(meals, currentSortBy, grouped, sorted),
+      );
     } catch (e) {
-      emit(HomePageStates.homePageError("Failed to delete meal: ${e.toString()}"));
+      emit(
+        HomePageStates.homePageError("Failed to delete meal: ${e.toString()}"),
+      );
     }
   }
 
   // Helper Methods
   MealModel _createNewMeal() => MealModel(
-        name: mealNameController.text,
-        calories: int.parse(mealCaloriesController.text),
-        time: mealTimeController.text,
-        photoPath: mealPhotoController.text,
-      );
+    name: mealNameController.text,
+    calories: int.parse(mealCaloriesController.text),
+    time: mealTimeController.text,
+    photoPath: mealPhotoController.text,
+  );
 
   List<MealModel> _insertMealSorted(MealModel newMeal) {
     final updatedMeals = List<MealModel>.from(meals);
     final comparator = _getComparator();
-    final insertIndex = currentSortBy == SortBy.none
-        ? updatedMeals.length
-        : updatedMeals.indexWhere((meal) => comparator(newMeal, meal) < 0);
-    
+    final insertIndex =
+        currentSortBy == SortBy.none
+            ? updatedMeals.length
+            : updatedMeals.indexWhere((meal) => comparator(newMeal, meal) < 0);
+
     updatedMeals.insert(
       insertIndex == -1 ? updatedMeals.length : insertIndex,
       newMeal,

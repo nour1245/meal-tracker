@@ -48,7 +48,12 @@ class _AppHomeScreenState extends State<AppHomeScreen> {
                               homePageLoading: () {
                                 return ShimmerMealList();
                               },
-                              homePageSuccess: (meals, sortBy) {
+                              homePageSuccess: (
+                                meals,
+                                sortBy,
+                                groupedMeals,
+                                sortedDates,
+                              ) {
                                 return Column(
                                   children: [
                                     Row(
@@ -65,7 +70,10 @@ class _AppHomeScreenState extends State<AppHomeScreen> {
                                     ),
                                     meals.isEmpty
                                         ? emptyListCase(context)
-                                        : MealList(meals: meals),
+                                        : MealList(
+                                          groupedMeals: groupedMeals,
+                                          sortedDates: sortedDates,
+                                        ),
                                   ],
                                 );
                               },
