@@ -17,55 +17,74 @@ class AppHomeScreen extends StatefulWidget {
 }
 
 class _AppHomeScreenState extends State<AppHomeScreen> {
+  late Future<void> _imageFuture;
+  bool _isImagePrecached = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isImagePrecached) {
+      _imageFuture = precacheImage(
+        AssetImage(ImagesConst.backGroundImage),
+        context,
+      ).then((_) {
+        setState(() {
+          _isImagePrecached = true;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    precacheImage(const AssetImage(ImagesConst.backGroundImage), context);
     return Scaffold(
       floatingActionButton: floatingButtonMethod(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-
-      body: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(ImagesConst.backGroundImage),
-          ),
-        ),
-        child: SafeArea(
-          child: BlocBuilder<HomePageCubit, HomePageStates>(
-            buildWhen: (previous, current) {
-              return current is HomePageLoading ||
-                  current is HomePageSuccess ||
-                  current is HomePageError;
-            },
-            builder: (context, state) {
-              return state.maybeWhen(
-                homePageLoading: () {
-                  return ShimmerMealList();
-                },
-                homePageSuccess: (meals, sortBy) {
-                  return Column(
-                    children: [
-                      SortByDropDown(sortBy: sortBy),
-                      meals.isEmpty
-                          ? emptyListCase(context)
-                          : MealList(meals: meals),
-                    ],
-                  );
-                },
-                homePageError: (message) {
-                  return Center(child: Text(message));
-                },
-                orElse: () {
-                  return Center(child: Text("No DATA"));
-                },
-              );
-            },
-          ),
-        ),
-      ),
+      body:
+          _isImagePrecached
+              ? Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(ImagesConst.backGroundImage),
+                  ),
+                ),
+                child: SafeArea(
+                  child: BlocBuilder<HomePageCubit, HomePageStates>(
+                    buildWhen: (previous, current) {
+                      return current is HomePageLoading ||
+                          current is HomePageSuccess ||
+                          current is HomePageError;
+                    },
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                        homePageLoading: () {
+                          return ShimmerMealList();
+                        },
+                        homePageSuccess: (meals, sortBy) {
+                          return Column(
+                            children: [
+                              SortByDropDown(sortBy: sortBy),
+                              meals.isEmpty
+                                  ? emptyListCase(context)
+                                  : MealList(meals: meals),
+                            ],
+                          );
+                        },
+                        homePageError: (message) {
+                          return Center(child: Text(message));
+                        },
+                        orElse: () {
+                          return Center(child: Text("No DATA"));
+                        },
+                      );
+                    },
+                  ),
+                ),
+              )
+              : ShimmerMealList(),
     );
   }
 

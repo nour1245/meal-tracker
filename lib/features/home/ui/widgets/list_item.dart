@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 
@@ -13,12 +14,13 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: ColorsManger.secondary,
       child: ListTile(
         title: Text(meal.name),
         subtitle: Text('${meal.calories} calories at ${meal.time}'),
         leading: Image.file(File(meal.photoPath)),
         trailing: IconButton(
-          icon: const Icon(Icons.delete, color: Colors.red),
+          icon: const Icon(Icons.delete, color: ColorsManger.primary),
           onPressed: () => context.read<HomePageCubit>().deleteMeal(index),
         ),
       ),

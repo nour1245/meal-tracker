@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 
@@ -11,7 +12,7 @@ class SortByDropDown extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButton<SortBy>(
-        dropdownColor: Colors.blueGrey,
+        dropdownColor: ColorsManger.secondary,
         value: sortBy,
         onChanged: (SortBy? newValue) {
           if (newValue != null) {
