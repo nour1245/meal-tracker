@@ -18,15 +18,14 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Meal Tracker',
-          theme: ThemeData(
-            primaryColor: ColorsManger.primary,
-            ),
-          home: BlocProvider(
-            create: (context) => HomePageCubit()..getSavedMeals(),
-            child: AppHomeScreen(),
-          ),
+          theme: ThemeData(primaryColor: ColorsManger.primary),
+          home: child,
         );
       },
+      child: BlocProvider(
+        create: (context) => HomePageCubit()..getSavedMeals(),
+        child: AppHomeScreen(),
+      ),
     );
   }
 }

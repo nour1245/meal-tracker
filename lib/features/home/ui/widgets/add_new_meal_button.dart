@@ -23,7 +23,6 @@ class AddNewMealButton extends StatelessWidget {
       backgroundColor: ColorsManger.primary,
       child: Icon(Icons.add),
       onPressed: () {
-        Future.delayed(Duration(seconds: 1));
         addNewMealDialog(
           context,
           mealNameController,
