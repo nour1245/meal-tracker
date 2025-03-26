@@ -18,9 +18,7 @@ class HomePageCubit extends Cubit<HomePageStates> {
   SortBy currentSortBy = SortBy.none;
   List<MealModel> meals = [];
 
-  HomePageCubit() : super(const HomePageStates.initial()) {
-    getSavedMeals();
-  }
+  HomePageCubit() : super(const HomePageStates.initial());
 
   // Sorting Methods
   void updateSortBy(SortBy newSortBy) {
@@ -113,7 +111,8 @@ class HomePageCubit extends Cubit<HomePageStates> {
   Future<void> deleteMeal(String mealId) async {
     try {
       final box = await Hive.openBox('mealsList');
-      final updatedMeals = List<MealModel>.from(meals)..removeWhere((meal) =>  meal.id == mealId,);
+      final updatedMeals = List<MealModel>.from(meals)
+        ..removeWhere((meal) => meal.id == mealId);
 
       await box.put('mealsList', updatedMeals);
       meals = updatedMeals;
@@ -167,11 +166,11 @@ class HomePageCubit extends Cubit<HomePageStates> {
   }
 
   void _clearControllers() {
-  mealNameController.clear();
-  mealCaloriesController.clear();
-  mealTimeController.clear();
-  mealPhotoController.clear();
-}
+    mealNameController.clear();
+    mealCaloriesController.clear();
+    mealTimeController.clear();
+    mealPhotoController.clear();
+  }
 
   @override
   Future<void> close() {
