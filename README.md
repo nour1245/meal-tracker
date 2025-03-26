@@ -23,6 +23,56 @@ The app features a visually appealing interface with shimmer loading effects and
 - **flutter_screenutil**: Screen size adaptation and responsive design
 - **shimmer**: Loading animation effects
 
+## File Structure
+```bash
+📦lib
+ ┣ 📂core
+ ┃ ┣ 📂constants
+ ┃ ┃ ┣ 📜hive_const.dart
+ ┃ ┃ ┣ 📜images.dart
+ ┃ ┃ ┗ 📜text.dart
+ ┃ ┣ 📂di
+ ┃ ┣ 📂helpers
+ ┃ ┃ ┣ 📜bloc_observer.dart
+ ┃ ┃ ┗ 📜services.dart
+ ┃ ┗ 📂themes
+ ┃ ┃ ┣ 📜app_theme.dart
+ ┃ ┃ ┣ 📜colors_manger.dart
+ ┃ ┃ ┗ 📜text_style.dart
+ ┣ 📂features
+ ┃ ┗ 📂home
+ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┣ 📜home_page_cubit.dart
+ ┃ ┃ ┃ ┣ 📜home_page_states.dart
+ ┃ ┃ ┃ ┗ 📜home_page_states.freezed.dart
+ ┃ ┃ ┣ 📂data
+ ┃ ┃ ┃ ┣ 📜meal_model.dart
+ ┃ ┃ ┃ ┗ 📜meal_model.g.dart
+ ┃ ┃ ┣ 📂methods
+ ┃ ┃ ┃ ┗ 📜bottom_sheet_setup.dart
+ ┃ ┃ ┗ 📂ui
+ ┃ ┃ ┃ ┣ 📂widgets
+ ┃ ┃ ┃ ┃ ┣ 📂bottom_sheet_widgets
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜add_meal_button.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜bottom_sheet.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜pick_date.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜pick_image.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜select_date_time_text.dart
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜select_image_text.dart
+ ┃ ┃ ┃ ┃ ┣ 📂home_screen_widgets
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜floating_add_new_meal_button.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜list_item.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜meal_calories.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜meal_list.dart
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜meal_name.dart
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜sort_by_drop_down.dart
+ ┃ ┃ ┃ ┃ ┗ 📜shimmer_loading.dart
+ ┃ ┃ ┃ ┗ 📜app_home_screen.dart
+ ┣ 📜main_dev.dart
+ ┣ 📜main_prod.dart
+ ┗ 📜myapp.dart
+```
+
 ## Demo
 
 | Screens        | Screens               
