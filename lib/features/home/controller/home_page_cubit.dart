@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:mealtracker/core/constants/hive_const.dart';
 import 'package:mealtracker/features/home/controller/home_page_states.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 import 'package:uuid/uuid.dart';
@@ -18,9 +19,7 @@ class HomePageCubit extends Cubit<HomePageStates> {
   SortBy currentSortBy = SortBy.none;
   List<MealModel> meals = [];
 
-  HomePageCubit() : super(const HomePageStates.initial()) {
-    getSavedMeals();
-  }
+  HomePageCubit() : super(const HomePageStates.initial());
 
   // Sorting Methods
   void updateSortBy(SortBy newSortBy) {
@@ -74,8 +73,8 @@ class HomePageCubit extends Cubit<HomePageStates> {
   Future<void> getSavedMeals() async {
     emit(const HomePageStates.homePageLoading());
     try {
-      final box = await Hive.openBox('mealsList');
-      final mealsList = box.get("mealsList");
+      final box = await Hive.openBox(HiveConst.mealList);
+      final mealsList = box.get(HiveConst.mealList);
       meals = (mealsList as List<dynamic>?)?.cast<MealModel>() ?? [];
       _sortMeals();
       final (grouped, sorted) = _groupAndSortMeals();
@@ -92,11 +91,11 @@ class HomePageCubit extends Cubit<HomePageStates> {
 
   Future<void> addNewMeal(BuildContext context) async {
     try {
-      final box = await Hive.openBox('mealsList');
+      final box = await Hive.openBox(HiveConst.mealList);
       final newMeal = _createNewMeal();
       final updatedMeals = _insertMealSorted(newMeal);
 
-      await box.put('mealsList', updatedMeals);
+      await box.put(HiveConst.mealList, updatedMeals);
       meals = updatedMeals;
       _clearControllers();
 
@@ -112,10 +111,11 @@ class HomePageCubit extends Cubit<HomePageStates> {
 
   Future<void> deleteMeal(String mealId) async {
     try {
-      final box = await Hive.openBox('mealsList');
-      final updatedMeals = List<MealModel>.from(meals)..removeWhere((meal) =>  meal.id == mealId,);
+      final box = await Hive.openBox(HiveConst.mealList);
+      final updatedMeals = List<MealModel>.from(meals)
+        ..removeWhere((meal) => meal.id == mealId);
 
-      await box.put('mealsList', updatedMeals);
+      await box.put(HiveConst.mealList, updatedMeals);
       meals = updatedMeals;
 
       final (grouped, sorted) = _groupAndSortMeals();
@@ -167,14 +167,10 @@ class HomePageCubit extends Cubit<HomePageStates> {
   }
 
   void _clearControllers() {
-    for (final controller in [
-      mealNameController,
-      mealCaloriesController,
-      mealTimeController,
-      mealPhotoController,
-    ]) {
-      controller.clear();
-    }
+    mealNameController.clear();
+    mealCaloriesController.clear();
+    mealTimeController.clear();
+    mealPhotoController.clear();
   }
 
   @override

@@ -4,5 +4,6 @@ import 'package:mealtracker/myapp.dart';
 
 void main() async {
   await setupServices();
+  await setupSentry();
   runApp(const MyApp());
 }
