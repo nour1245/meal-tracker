@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ElevatedButton addMealButton(
-  GlobalKey<FormState> _formKey,
+  GlobalKey<FormState> formKey,
   mealTimeController,
   BuildContext context,
   mealPhotoController,
@@ -9,7 +9,7 @@ ElevatedButton addMealButton(
 ) {
   return ElevatedButton(
     onPressed: () {
-      if (_formKey.currentState!.validate()) {
+      if (formKey.currentState!.validate()) {
         if (mealTimeController.text.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Please pick a date and time')),

@@ -16,7 +16,7 @@ void addNewMealDialog(
   mealPhotoController,
   void Function() onPressed,
 ) {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   showModalBottomSheet(
     isScrollControlled: true,
@@ -30,7 +30,7 @@ void addNewMealDialog(
         ),
         child: SingleChildScrollView(
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -81,7 +81,7 @@ void addNewMealDialog(
                   ),
                   SizedBox(height: 50.h),
                   addMealButton(
-                    _formKey,
+                    formKey,
                     mealTimeController,
                     context,
                     mealPhotoController,
