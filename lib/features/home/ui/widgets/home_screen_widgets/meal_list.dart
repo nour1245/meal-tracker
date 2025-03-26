@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
-import 'package:mealtracker/features/home/ui/widgets/list_item.dart';
+import 'package:mealtracker/features/home/ui/widgets/home_screen_widgets/list_item.dart';
 
 class MealList extends StatelessWidget {
   const MealList({

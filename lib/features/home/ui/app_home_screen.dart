@@ -4,10 +4,10 @@ import 'package:mealtracker/core/constants/images.dart';
 import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/controller/home_page_states.dart';
-import 'package:mealtracker/features/home/ui/widgets/add_new_meal_button.dart';
-import 'package:mealtracker/features/home/ui/widgets/meal_list.dart';
+import 'package:mealtracker/features/home/ui/widgets/home_screen_widgets/floating_add_new_meal_button.dart';
+import 'package:mealtracker/features/home/ui/widgets/home_screen_widgets/meal_list.dart';
 import 'package:mealtracker/features/home/ui/widgets/shimmer_loading.dart';
-import 'package:mealtracker/features/home/ui/widgets/sort_by_drop_down.dart';
+import 'package:mealtracker/features/home/ui/widgets/home_screen_widgets/sort_by_drop_down.dart';
 
 class AppHomeScreen extends StatefulWidget {
   const AppHomeScreen({super.key});
@@ -109,8 +109,8 @@ class _AppHomeScreenState extends State<AppHomeScreen> {
     );
   }
 
-  AddNewMealButton floatingButtonMethod(BuildContext context) {
-    return AddNewMealButton(
+  FloatingAddNewMealButton floatingButtonMethod(BuildContext context) {
+    return FloatingAddNewMealButton(
       mealNameController: context.read<HomePageCubit>().mealNameController,
       mealCaloriesController:
           context.read<HomePageCubit>().mealCaloriesController,

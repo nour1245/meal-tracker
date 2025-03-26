@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mealtracker/core/themes/colors_manger.dart';
-import 'package:mealtracker/features/home/ui/widgets/bottom_sheet.dart';
+import 'package:mealtracker/features/home/ui/widgets/bottom_sheet_widgets/bottom_sheet.dart';
 
-class AddNewMealButton extends StatelessWidget {
-  const AddNewMealButton({
+class FloatingAddNewMealButton extends StatelessWidget {
+  const FloatingAddNewMealButton({
     super.key,
     required this.mealNameController,
     required this.mealCaloriesController,
