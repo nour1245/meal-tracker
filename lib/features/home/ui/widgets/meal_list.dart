@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mealtracker/core/themes/colors_manger.dart';
-import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 import 'package:mealtracker/features/home/ui/widgets/list_item.dart';
 
@@ -54,7 +53,7 @@ class _DateGroup extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
-        ...meals.map((meal) => ListItem(meal: meal,mealId: meal.id,)),
+        ...meals.map((meal) => ListItem(meal: meal, mealId: meal.id)),
       ],
     );
   }
