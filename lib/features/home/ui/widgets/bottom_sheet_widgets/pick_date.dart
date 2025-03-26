@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mealtracker/core/constants/text.dart';
 
 class DatePickerButton extends StatelessWidget {
   final TextEditingController controller;
@@ -36,7 +37,7 @@ class DatePickerButton extends StatelessWidget {
           }
         }
       },
-      child: const Text('Pick Date & Time'),
+      child: const Text(TextConstants.pickDateTime),
     );
   }
 }

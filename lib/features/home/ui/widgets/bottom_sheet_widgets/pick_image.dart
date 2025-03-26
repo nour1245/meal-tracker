@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mealtracker/core/constants/text.dart';
 
 class ImagePickerButton extends StatelessWidget {
   final TextEditingController controller;
@@ -16,7 +17,7 @@ class ImagePickerButton extends StatelessWidget {
         final image = await ImagePicker().pickImage(source: ImageSource.gallery);
         if (image != null) controller.text = image.path;
       },
-      child: const Text('Pick Image'),
+      child: const Text(TextConstants.pickImage),
     );
   }
 }

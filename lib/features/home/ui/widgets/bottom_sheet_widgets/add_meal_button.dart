@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealtracker/core/constants/text.dart';
 
 class AddMealButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -21,20 +22,20 @@ class AddMealButton extends StatelessWidget {
         if (formKey.currentState!.validate()) {
           if (mealTimeController.text.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please pick a date and time')),
+              const SnackBar(content: Text(TextConstants.dateTimeNotValid)),
             );
             return;
           }
           if (mealPhotoController.text.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please pick an image')),
+              const SnackBar(content: Text(TextConstants.imageNotValid)),
             );
             return;
           }
           onPressed();
         }
       },
-      child: const Text("Add Meal"),
+      child: const Text(TextConstants.addMeal),
     );
   }
 }

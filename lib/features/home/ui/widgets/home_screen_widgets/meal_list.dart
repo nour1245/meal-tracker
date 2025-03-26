@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealtracker/core/constants/text.dart';
 import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
 import 'package:mealtracker/features/home/ui/widgets/home_screen_widgets/list_item.dart';
@@ -45,11 +46,11 @@ class _DateGroup extends StatelessWidget {
       children: [
         ListTile(
           title: Text(
-            'Date: ${date.toLocal().toString().split(' ')[0]}',
+            '${TextConstants.date}: ${date.toLocal().toString().split(' ')[0]}',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           subtitle: Text(
-            'Total Calories: $totalCalories',
+            '${TextConstants.totalCalories}: $totalCalories',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),

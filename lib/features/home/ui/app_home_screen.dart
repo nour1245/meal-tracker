@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealtracker/core/constants/images.dart';
+import 'package:mealtracker/core/constants/text.dart';
 import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/controller/home_page_states.dart';
@@ -60,7 +61,7 @@ class _AppHomeScreenState extends State<AppHomeScreen> {
                                       children: [
                                         Spacer(),
                                         Text(
-                                          "SortBy",
+                                          TextConstants.sortBy,
                                           style: AppTextStyle.mainText(
                                             context,
                                           ).copyWith(color: Colors.red),
@@ -81,7 +82,7 @@ class _AppHomeScreenState extends State<AppHomeScreen> {
                                 return Center(child: Text(message));
                               },
                               orElse: () {
-                                return Center(child: Text("No DATA"));
+                                return Center(child: Text(TextConstants.noData));
                               },
                             );
                           },
@@ -101,7 +102,7 @@ class _AppHomeScreenState extends State<AppHomeScreen> {
         children: [
           Image.asset(ImagesConst.noMealsImage),
           Text(
-            "No Meals Yet!! Add Meals Now",
+            TextConstants.noMeals,
             style: AppTextStyle.mainText(context),
           ),
         ],

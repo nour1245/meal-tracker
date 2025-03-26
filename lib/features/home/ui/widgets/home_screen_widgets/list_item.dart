@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mealtracker/core/constants/text.dart';
 import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/data/meal_model.dart';
@@ -18,7 +19,9 @@ class ListItem extends StatelessWidget {
       color: ColorsManger.primary,
       child: ListTile(
         title: Text(meal.name),
-        subtitle: Text('${meal.calories} calories at ${meal.time}'),
+        subtitle: Text(
+          '${meal.calories} ${TextConstants.caloriesAt} ${meal.time}',
+        ),
         leading: Container(
           width: 60.r,
           height: 60.r,
