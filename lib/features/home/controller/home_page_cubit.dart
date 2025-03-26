@@ -167,15 +167,11 @@ class HomePageCubit extends Cubit<HomePageStates> {
   }
 
   void _clearControllers() {
-    for (final controller in [
-      mealNameController,
-      mealCaloriesController,
-      mealTimeController,
-      mealPhotoController,
-    ]) {
-      controller.clear();
-    }
-  }
+  mealNameController.clear();
+  mealCaloriesController.clear();
+  mealTimeController.clear();
+  mealPhotoController.clear();
+}
 
   @override
   Future<void> close() {

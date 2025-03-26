@@ -16,41 +16,46 @@ class MealList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
+      child: ListView.separated(
         physics: const BouncingScrollPhysics(),
-        itemCount: sortedDates.length * 2,
+        itemCount: sortedDates.length,
+        separatorBuilder:
+            (_, __) => const Divider(height: 24, color: ColorsManger.primary),
         itemBuilder: (context, index) {
-          if (index.isOdd) {
-            return const Divider(height: 0, color: ColorsManger.primary);
-          }
-          final groupIndex = index ~/ 2;
-          final date = sortedDates[groupIndex];
+          final date = sortedDates[index];
           final mealsOfDay = groupedMeals[date]!;
-          final totalCalories = mealsOfDay.fold(
-            0,
-            (sum, meal) => sum + meal.calories,
-          );
-          return Column(
-            children: [
-              ListTile(
-                title: Text(
-                  'Date: ${date.toLocal().toString().split(' ')[0]}',
-                  style: AppTextStyle.mainText(
-                    context,
-                  ).copyWith(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                subtitle: Text(
-                  'Total Calories: $totalCalories',
-                  style: AppTextStyle.mainText(context),
-                ),
-              ),
-              ...mealsOfDay.map((meal) {
-                return ListItem(meal: meal, listItem: meal.id);
-              }),
-            ],
-          );
+
+          return _DateGroup(date: date, meals: mealsOfDay);
         },
       ),
+    );
+  }
+}
+
+class _DateGroup extends StatelessWidget {
+  final DateTime date;
+  final List<MealModel> meals;
+
+  const _DateGroup({required this.date, required this.meals});
+
+  @override
+  Widget build(BuildContext context) {
+    final totalCalories = meals.fold(0, (sum, meal) => sum + meal.calories);
+
+    return Column(
+      children: [
+        ListTile(
+          title: Text(
+            'Date: ${date.toLocal().toString().split(' ')[0]}',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          subtitle: Text(
+            'Total Calories: $totalCalories',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        ...meals.map((meal) => ListItem(meal: meal,mealId: meal.id,)),
+      ],
     );
   }
 }
