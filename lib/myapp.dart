@@ -5,6 +5,7 @@ import 'package:mealtracker/core/constants/text.dart';
 import 'package:mealtracker/core/themes/app_theme.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/ui/app_home_screen.dart';
+import 'package:mealtracker/features/mealsScreen/ui/meals_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       },
       child: BlocProvider(
         create: (context) => HomePageCubit()..getSavedMeals(),
-        child: AppHomeScreen(),
+        child: MealsScreen(),
       ),
     );
   }
