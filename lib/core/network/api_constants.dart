@@ -5,5 +5,5 @@ class ApiConstants {
 
 class EndPoints {
   static const getCatigories='categories.php';
-  static const getMealsByCategory='filter.php?c=';
+  static const getMealsByCategory='filter.php';
 }

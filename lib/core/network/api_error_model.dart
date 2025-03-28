@@ -3,7 +3,7 @@ part 'api_error_model.g.dart';
 
 @JsonSerializable()
 class ApiErrorModel {
-  @JsonKey(defaultValue: "meals")
+  @JsonKey(name: "meals")
   final String? error;
 
   ApiErrorModel({required this.error});

@@ -14,16 +14,20 @@ class CategoriesResponeModel {
 
 @JsonSerializable()
 class Category {
-  String idCategory;
-  String strCategory;
-  String strCategoryThumb;
-  String strCategoryDescription;
+  @JsonKey(name: "idCategory")
+  String categoryId;
+  @JsonKey(name: "strCategory")
+  String categoryName;
+  @JsonKey(name: "strCategoryThumb")
+  String categoryPhoto;
+  @JsonKey(name: "strCategoryDescription")
+  String categoryDescription;
 
   Category({
-    required this.idCategory,
-    required this.strCategory,
-    required this.strCategoryThumb,
-    required this.strCategoryDescription,
+    required this.categoryId,
+    required this.categoryName,
+    required this.categoryPhoto,
+    required this.categoryDescription,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) =>

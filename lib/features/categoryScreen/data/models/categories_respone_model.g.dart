@@ -21,15 +21,15 @@ Map<String, dynamic> _$CategoriesResponeModelToJson(
     };
 
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
-      idCategory: json['idCategory'] as String,
-      strCategory: json['strCategory'] as String,
-      strCategoryThumb: json['strCategoryThumb'] as String,
-      strCategoryDescription: json['strCategoryDescription'] as String,
+      categoryId: json['idCategory'] as String,
+      categoryName: json['strCategory'] as String,
+      categoryPhoto: json['strCategoryThumb'] as String,
+      categoryDescription: json['strCategoryDescription'] as String,
     );
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
-      'idCategory': instance.idCategory,
-      'strCategory': instance.strCategory,
-      'strCategoryThumb': instance.strCategoryThumb,
-      'strCategoryDescription': instance.strCategoryDescription,
+      'idCategory': instance.categoryId,
+      'strCategory': instance.categoryName,
+      'strCategoryThumb': instance.categoryPhoto,
+      'strCategoryDescription': instance.categoryDescription,
     };
