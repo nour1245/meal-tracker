@@ -8,4 +8,10 @@ class AppTextStyle {
     fontWeight: FontWeight.w400,
     color:ColorsManger.text,
   );
+
+   static TextStyle headText(BuildContext context) => TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.bold,
+    color:ColorsManger.secondary,
+  );
 }

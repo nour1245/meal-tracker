@@ -19,4 +19,5 @@ class TextConstants {
   static const String totalCalories = 'Total Calories';
   static const String mealName = "Meal Name";
   static const String noMealNameText = 'Please enter a meal name';
+  static const String mealSearch = 'Looking For Meal?';
 }
