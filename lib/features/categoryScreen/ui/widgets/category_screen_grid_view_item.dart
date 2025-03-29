@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mealtracker/core/helpers/extensions.dart';
@@ -20,23 +21,40 @@ class CategoryScreenGridViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>context.pushNamed(Routes.mealsScreen,arguments: categoryName),
+      onTap:
+          () => context.pushNamed(Routes.mealsScreen, arguments: categoryName),
       child: Column(
         children: [
           Expanded(
-            child: Container(
-              width: 100.w,
-              height: 120.h,
-              padding: EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(imageLink)),
-                borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(color: Colors.grey),
-              ),
+            child: CachedNetworkImage(
+              errorWidget: (context, error, stackTrace) => Icon(Icons.error),
+
+              placeholder: (context, child) => LinearProgressIndicator(),
+              imageUrl: imageLink,
+              imageBuilder:
+                  (context, imageProvider) => Container(
+                    width: 100.w,
+                    height: 120.h,
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                  ),
             ),
           ),
 
-          Text(" $categoryName", style: AppTextStyle.mainText(context).copyWith(color: ColorsManger.primary,fontWeight: FontWeight.bold)),
+          Text(
+            " $categoryName",
+            style: AppTextStyle.mainText(context).copyWith(
+              color: ColorsManger.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );

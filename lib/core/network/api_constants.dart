@@ -6,4 +6,7 @@ class ApiConstants {
 class EndPoints {
   static const getCatigories='categories.php';
   static const getMealsByCategory='filter.php';
+  static const getMealById='lookup.php';
+  static const searchMeals='search.php';
+
 }

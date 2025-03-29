@@ -7,7 +7,6 @@ import 'package:mealtracker/core/routing/routes.dart';
 import 'package:mealtracker/core/themes/app_theme.dart';
 import 'package:mealtracker/features/home/controller/home_page_cubit.dart';
 import 'package:mealtracker/features/home/ui/app_home_screen.dart';
-import 'package:mealtracker/features/categoryScreen/ui/categories_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.appRouter});
@@ -21,18 +20,13 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-          
-          onGenerateRoute: appRouter.gnerateRoute,
+          initialRoute: Routes.mainScreen,
+          onGenerateRoute: appRouter.generateRoute,
           debugShowCheckedModeBanner: false,
           title: TextConstants.appTitle,
           theme: AppTheme.lightTheme,
-          home: child,
         );
       },
-      child: BlocProvider(
-        create: (context) => HomePageCubit()..getSavedMeals(),
-        child: CategoriesScreen(),
-      ),
     );
   }
 }

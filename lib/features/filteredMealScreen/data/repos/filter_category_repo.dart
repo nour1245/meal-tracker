@@ -1,3 +1,4 @@
+import 'package:mealtracker/core/network/api_error_handler.dart';
 import 'package:mealtracker/core/network/api_error_model.dart';
 import 'package:mealtracker/core/network/api_result.dart';
 import 'package:mealtracker/core/network/api_services.dart';
@@ -15,7 +16,7 @@ class FilterCategoryRepo {
       final response = await apiServices.getMealsByCategory(categoryName);
       return ApiResult.success(response);
     } catch (e) {
-      return ApiResult.failure(ApiErrorModel(error: e.toString()));
+      return ApiResult.failure(ApiErrorHandler.handle(e));
     }
   }
 }

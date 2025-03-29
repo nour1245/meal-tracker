@@ -1,17 +1,17 @@
 import 'package:mealtracker/core/network/api_error_handler.dart';
-import 'package:mealtracker/core/network/api_error_model.dart';
 import 'package:mealtracker/core/network/api_result.dart';
 import 'package:mealtracker/core/network/api_services.dart';
-import 'package:mealtracker/features/categoryScreen/data/models/categories_respone_model.dart';
+import 'package:mealtracker/features/searchScreen/data/models/search_response_model.dart';
 
-class CategoriesRepo {
+class SearchRepo {
   final ApiServices apiServices;
 
-  CategoriesRepo( this.apiServices);
-
-  Future<ApiResult<CategoriesResponeModel>> getCategories() async {
+  SearchRepo(this.apiServices);
+  Future<ApiResult<SearchMealsResponseModel>> searchMeals(
+    String mealName,
+  ) async {
     try {
-      final response = await apiServices.getCategories();
+      final response = await apiServices.searchMeals(mealName);
       return ApiResult.success(response);
     } catch (e) {
       return ApiResult.failure(ApiErrorHandler.handle(e));
