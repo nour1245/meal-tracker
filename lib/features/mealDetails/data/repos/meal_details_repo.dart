@@ -1,5 +1,4 @@
 import 'package:mealtracker/core/network/api_error_handler.dart';
-import 'package:mealtracker/core/network/api_error_model.dart';
 import 'package:mealtracker/core/network/api_result.dart';
 import 'package:mealtracker/core/network/api_services.dart';
 import 'package:mealtracker/features/mealDetails/data/models/meal_details_response_model.dart';
