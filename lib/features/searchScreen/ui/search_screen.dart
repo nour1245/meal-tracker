@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mealtracker/core/constants/text.dart';
 import 'package:mealtracker/core/di/dependancy.dart';
 import 'package:mealtracker/features/searchScreen/controller/cubit/search_cubit.dart';
 import 'package:mealtracker/features/searchScreen/controller/cubit/search_state.dart';
@@ -27,7 +28,7 @@ class SearchScreen extends StatelessWidget {
                   builder: (context, state) {
                     final cubit = context.read<SearchCubit>();
                     return SearchAnchor.bar(
-                      barHintText: 'Looking For Meal?',
+                      barHintText:TextConstants.mealSearch ,
                       onChanged: (value) {
                         if (_debounceTimer?.isActive ?? false) {
                           _debounceTimer?.cancel();
