@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mealtracker/features/mealDetails/controller/cubit/meal_details_cubit.dart';
 import 'package:mealtracker/features/mealDetails/controller/cubit/meal_details_state.dart';
 import 'package:mealtracker/features/mealDetails/ui/widgets/details_screen_body.dart';
+import 'package:mealtracker/features/mealDetails/ui/widgets/meal_details_shimmer.dart';
 
 class MealDetailsScreen extends StatelessWidget {
   const MealDetailsScreen({super.key});
@@ -16,7 +17,7 @@ class MealDetailsScreen extends StatelessWidget {
         child: BlocBuilder<MealDetailsCubit, MealDetailsState>(
           builder: (context, state) {
             return state.when(
-              mealLoading: () => Center(child: CircularProgressIndicator()),
+              mealLoading: () => MealDetailsShimmer(),
               mealSuccess: (mealDetails) {
                 return DetailsScreenBody(mealDetails:mealDetails);
               },

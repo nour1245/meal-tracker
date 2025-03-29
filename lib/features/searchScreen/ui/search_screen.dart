@@ -9,7 +9,7 @@ import 'package:mealtracker/features/searchScreen/ui/suggetion_list.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
-  final _debounceDuration = const Duration(seconds: 5);
+  final _debounceDuration = const Duration(microseconds: 3500);
 
   @override
   Widget build(BuildContext context) {

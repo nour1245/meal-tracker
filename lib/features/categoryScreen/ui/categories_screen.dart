@@ -3,8 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mealtracker/core/di/dependancy.dart';
+import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/categoryScreen/controller/cubit/categories_cubit.dart';
 import 'package:mealtracker/features/categoryScreen/controller/cubit/categories_state.dart';
+import 'package:mealtracker/features/categoryScreen/ui/widgets/categories_shimmer.dart';
 import 'package:mealtracker/features/categoryScreen/ui/widgets/category_screen_grid_view_builder.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -22,11 +24,13 @@ class CategoriesScreen extends StatelessWidget {
               builder: (context, state) {
                 return state.when(
                   categoriesLoading:
-                      () => Center(child: CircularProgressIndicator()),
+                      () => CategoriesShimmer(),
                   categoriesSuccess:
                       (categories) => Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Text('Ctegories',style: AppTextStyle.headText(context),),
+                          SizedBox(height: 10.h,),
                           Expanded(
                             child: CategoryScreenGridViewBuilder(
                               listOfCategory: categories,

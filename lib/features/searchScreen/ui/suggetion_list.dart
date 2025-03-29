@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mealtracker/core/helpers/extensions.dart';
 import 'package:mealtracker/core/routing/routes.dart';
 import 'package:mealtracker/features/searchScreen/controller/cubit/search_cubit.dart';
@@ -16,7 +18,7 @@ class SuggestionsList extends StatelessWidget {
         return state.when(
           searchLoading:
               () => const ListTile(
-                title: Center(child: CircularProgressIndicator()),
+                title: Center(),
               ),
           searchSuccess: (searchResults) {
             if (searchResults.isEmpty) {
@@ -26,8 +28,22 @@ class SuggestionsList extends StatelessWidget {
               children:
                   searchResults
                       .map(
-                        (meal) => ListTile(
-                          title: Text(meal['strMeal'] ?? 'Unknown meal'),
+                        (meal) => InkWell(
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 35.w,
+                                height: 35.h,
+                                child: CachedNetworkImage(
+                                  placeholder: (context, url) => LinearProgressIndicator(),
+                                  imageUrl: meal['strMealThumb'] ?? '',
+                                
+                                ),
+                              ),
+                              SizedBox(width: 3.w,),
+                              Flexible(child: Text(meal['strMeal'] ?? 'Unknown meal')),
+                            ],
+                          ),
                           onTap: () {
                             controller.closeView(meal['strMeal']);
                             context.pushNamed(
