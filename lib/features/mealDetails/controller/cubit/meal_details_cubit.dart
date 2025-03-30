@@ -12,7 +12,7 @@ class MealDetailsCubit extends Cubit<MealDetailsState> {
     final response = await mealDetailsRepo.getMealDetails(mealId);
     response.when(
       success: (meal) {
-        emit(MealSuccess(meal.mealDetails[0]));
+        emit(MealSuccess(meal.mealDetails![0]));
       },
       failure: (apiErrorModel) {
         emit(MealError(apiErrorModel.error!));

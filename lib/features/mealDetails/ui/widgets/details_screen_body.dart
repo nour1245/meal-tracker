@@ -1,16 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mealtracker/core/themes/colors_manger.dart';
 import 'package:mealtracker/core/themes/text_style.dart';
-import 'package:mealtracker/features/mealDetails/data/models/meal_details_response_model.dart';
 
 class DetailsScreenBody extends StatelessWidget {
   const DetailsScreenBody({super.key, required this.mealDetails});
-  final Meal mealDetails;
+  final Map<String, String?> mealDetails;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       padding: EdgeInsets.all(5.h),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -20,8 +21,21 @@ class DetailsScreenBody extends StatelessWidget {
           SizedBox(height: 5.h),
           mealNameAndArea(context),
           SizedBox(height: 5.h),
-          Text("Ingredients : ", style: AppTextStyle.headText(context)),
-          ..._buildIngredientsAndMeasures(mealDetails, context),
+          Container(
+            padding: EdgeInsets.all(12.h),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.r),
+              color: ColorsManger.primary,
+              border: Border.all(color: Colors.black),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Ingredients : ", style: AppTextStyle.headText(context)),
+                ..._buildIngredientsAndMeasures(mealDetails, context),
+              ],
+            ),
+          ),
           SizedBox(height: 10.r),
           instructions(context),
         ],
@@ -29,57 +43,14 @@ class DetailsScreenBody extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildIngredientsAndMeasures(Meal meal, BuildContext context) {
-    List<String?> ingredients = [
-      meal.ingredient1,
-      meal.ingredient2,
-      meal.ingredient3,
-      meal.ingredient4,
-      meal.ingredient5,
-      meal.ingredient6,
-      meal.ingredient7,
-      meal.ingredient8,
-      meal.ingredient9,
-      meal.ingredient10,
-      meal.ingredient11,
-      meal.ingredient12,
-      meal.ingredient13,
-      meal.ingredient14,
-      meal.ingredient15,
-      meal.ingredient16,
-      meal.ingredient17,
-      meal.ingredient18,
-      meal.ingredient19,
-      meal.ingredient20,
-    ];
-
-    List<String?> measures = [
-      meal.measure1,
-      meal.measure2,
-      meal.measure3,
-      meal.measure4,
-      meal.measure5,
-      meal.measure6,
-      meal.measure7,
-      meal.measure8,
-      meal.measure9,
-      meal.measure10,
-      meal.measure11,
-      meal.measure12,
-      meal.measure13,
-      meal.measure14,
-      meal.measure15,
-      meal.measure16,
-      meal.measure17,
-      meal.measure18,
-      meal.measure19,
-      meal.measure20,
-    ];
-
+  List<Widget> _buildIngredientsAndMeasures(
+    Map<String, String?> meal,
+    BuildContext context,
+  ) {
     List<Widget> widgets = [];
-    for (int i = 0; i < ingredients.length; i++) {
-      final ingredient = ingredients[i];
-      final measure = measures[i];
+    for (int i = 0; i <= 20; i++) {
+      final ingredient = meal['strIngredient$i'];
+      final measure = meal["strMeasure$i"];
       if (ingredient != null &&
           ingredient.isNotEmpty &&
           measure != null &&
@@ -96,82 +67,95 @@ class DetailsScreenBody extends StatelessWidget {
     return widgets;
   }
 
-  Column instructions(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: "Instructions : \n",
-                style: AppTextStyle.headText(context),
-              ),
-              TextSpan(
-                text: mealDetails.instructions!,
-                style: AppTextStyle.mainText(context),
-              ),
-            ],
+  Container instructions(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.r),
+        color: ColorsManger.primary,
+        border: Border.all(color: Colors.black),
+      ),
+      padding: EdgeInsets.all(12.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "Instructions : \n",
+                  style: AppTextStyle.headText(context),
+                ),
+                TextSpan(
+                  text: mealDetails["strInstructions"]!,
+                  style: AppTextStyle.mainText(context),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Row mealNameAndArea(BuildContext context) {
-    return Row(
-      children: [
-        Flexible(
-          flex: 5,
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: "Name : ",
-                  style: AppTextStyle.headText(context),
-                ),
-                TextSpan(
-                  text: mealDetails.mealName!,
-                  style: AppTextStyle.mainText(context),
-                ),
-              ],
+  Container mealNameAndArea(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.r),
+        color: ColorsManger.primary,
+        border: Border.all(color: Colors.black),
+      ),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 5,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Name : ",
+                    style: AppTextStyle.headText(context),
+                  ),
+                  TextSpan(
+                    text: mealDetails["strMeal"],
+                    style: AppTextStyle.mainText(context),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Spacer(),
-        Flexible(
-          flex: 3,
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: "Area : ",
-                  style: AppTextStyle.headText(context),
-                ),
-                TextSpan(
-                  text: mealDetails.mealArea!,
-                  style: AppTextStyle.mainText(context),
-                ),
-              ],
+          Spacer(),
+          Flexible(
+            flex: 3,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Area : ",
+                    style: AppTextStyle.headText(context),
+                  ),
+                  TextSpan(
+                    text: mealDetails["strArea"],
+                    style: AppTextStyle.mainText(context),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   CachedNetworkImage mealImage() {
     return CachedNetworkImage(
-      imageUrl: mealDetails.mealPhoto!,
+      imageUrl: mealDetails["strMealThumb"]!,
       imageBuilder:
           (context, imageProvider) => Container(
             width: double.infinity,
             height: 250.h,
             decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: imageProvider,
-              ),
+              image: DecorationImage(fit: BoxFit.cover, image: imageProvider),
               borderRadius: BorderRadius.circular(10.r),
               border: Border.all(color: Colors.black),
             ),
