@@ -15,49 +15,70 @@ class AppRouter {
   Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.categoryScreen:
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create: (context) => getIt<CategoriesCubit>(),
-                child: CategoriesScreen(),
-              ),
+        return _buildRoute(
+          BlocProvider(
+            create: (context) => getIt<CategoriesCubit>(),
+            child: const CategoriesScreen(),
+          ),
         );
+
       case Routes.mainScreen:
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create: (context) => getIt<HomePageCubit>()..getSavedMeals(),
-                child: AppHomeScreen(),
-              ),
+        return _buildRoute(
+          BlocProvider(
+            create: (context) => getIt<HomePageCubit>()..getSavedMeals(),
+            child: const AppHomeScreen(),
+          ),
         );
+
       case Routes.mealsScreen:
         final categoryName = settings.arguments as String;
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create: (context) => getIt<FilterdMealsCubit>(),
-                child: MealsScreen(categoryName: categoryName),
-              ),
+        return _buildRoute(
+          BlocProvider(
+            create: (context) => getIt<FilterdMealsCubit>(),
+            child: MealsScreen(categoryName: categoryName),
+          ),
         );
+
       case Routes.mealDetailsScreen:
         final mealId = settings.arguments as String;
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create:
-                    (context) =>
-                        getIt<MealDetailsCubit>()..loadMealDetails(mealId),
-                child: MealDetailsScreen(),
-              ),
+        return _buildRoute(
+          BlocProvider(
+            create:
+                (context) => getIt<MealDetailsCubit>()..loadMealDetails(mealId),
+            child: const MealDetailsScreen(),
+          ),
+          fullscreenDialog:
+              true, // Optional: if you want a different transition
         );
+
       default:
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create: (context) => getIt<HomePageCubit>()..getSavedMeals(),
-                child: const AppHomeScreen(),
-              ),
+        return _buildRoute(
+          BlocProvider(
+            create: (context) => getIt<HomePageCubit>()..getSavedMeals(),
+            child: const AppHomeScreen(),
+          ),
         );
     }
+  }
+
+  PageRouteBuilder _buildRoute(Widget widget, {bool fullscreenDialog = false}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => widget,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(position: offsetAnimation, child: child);
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+      fullscreenDialog: fullscreenDialog,
+    );
   }
 }

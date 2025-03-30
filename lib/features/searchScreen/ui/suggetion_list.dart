@@ -32,15 +32,15 @@ class SuggestionsList extends StatelessWidget {
                           child: Row(
                             children: [
                               SizedBox(
-                                width: 35.w,
-                                height: 35.h,
+                                width: 70.w,
+                                height: 70.h,
                                 child: CachedNetworkImage(
                                   placeholder: (context, url) => LinearProgressIndicator(),
                                   imageUrl: meal['strMealThumb'] ?? '',
                                 
                                 ),
                               ),
-                              SizedBox(width: 3.w,),
+                              SizedBox(width: 8.w,),
                               Flexible(child: Text(meal['strMeal'] ?? 'Unknown meal')),
                             ],
                           ),

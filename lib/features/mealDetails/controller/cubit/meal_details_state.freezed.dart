@@ -19,21 +19,21 @@ mixin _$MealDetailsState<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() mealLoading,
-    required TResult Function(Meal mealDetails) mealSuccess,
+    required TResult Function(Map<String, String?> mealDetails) mealSuccess,
     required TResult Function(String error) mealError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? mealLoading,
-    TResult? Function(Meal mealDetails)? mealSuccess,
+    TResult? Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult? Function(String error)? mealError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? mealLoading,
-    TResult Function(Meal mealDetails)? mealSuccess,
+    TResult Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult Function(String error)? mealError,
     required TResult orElse(),
   }) =>
@@ -125,7 +125,7 @@ class _$MealLoadingImpl<T> implements MealLoading<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() mealLoading,
-    required TResult Function(Meal mealDetails) mealSuccess,
+    required TResult Function(Map<String, String?> mealDetails) mealSuccess,
     required TResult Function(String error) mealError,
   }) {
     return mealLoading();
@@ -135,7 +135,7 @@ class _$MealLoadingImpl<T> implements MealLoading<T> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? mealLoading,
-    TResult? Function(Meal mealDetails)? mealSuccess,
+    TResult? Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult? Function(String error)? mealError,
   }) {
     return mealLoading?.call();
@@ -145,7 +145,7 @@ class _$MealLoadingImpl<T> implements MealLoading<T> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? mealLoading,
-    TResult Function(Meal mealDetails)? mealSuccess,
+    TResult Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult Function(String error)? mealError,
     required TResult orElse(),
   }) {
@@ -200,7 +200,7 @@ abstract class _$$MealSuccessImplCopyWith<T, $Res> {
           $Res Function(_$MealSuccessImpl<T>) then) =
       __$$MealSuccessImplCopyWithImpl<T, $Res>;
   @useResult
-  $Res call({Meal mealDetails});
+  $Res call({Map<String, String?> mealDetails});
 }
 
 /// @nodoc
@@ -220,9 +220,9 @@ class __$$MealSuccessImplCopyWithImpl<T, $Res>
   }) {
     return _then(_$MealSuccessImpl<T>(
       null == mealDetails
-          ? _value.mealDetails
+          ? _value._mealDetails
           : mealDetails // ignore: cast_nullable_to_non_nullable
-              as Meal,
+              as Map<String, String?>,
     ));
   }
 }
@@ -230,10 +230,16 @@ class __$$MealSuccessImplCopyWithImpl<T, $Res>
 /// @nodoc
 
 class _$MealSuccessImpl<T> implements MealSuccess<T> {
-  const _$MealSuccessImpl(this.mealDetails);
+  const _$MealSuccessImpl(final Map<String, String?> mealDetails)
+      : _mealDetails = mealDetails;
 
+  final Map<String, String?> _mealDetails;
   @override
-  final Meal mealDetails;
+  Map<String, String?> get mealDetails {
+    if (_mealDetails is EqualUnmodifiableMapView) return _mealDetails;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_mealDetails);
+  }
 
   @override
   String toString() {
@@ -245,12 +251,13 @@ class _$MealSuccessImpl<T> implements MealSuccess<T> {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MealSuccessImpl<T> &&
-            (identical(other.mealDetails, mealDetails) ||
-                other.mealDetails == mealDetails));
+            const DeepCollectionEquality()
+                .equals(other._mealDetails, _mealDetails));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, mealDetails);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_mealDetails));
 
   /// Create a copy of MealDetailsState
   /// with the given fields replaced by the non-null parameter values.
@@ -265,7 +272,7 @@ class _$MealSuccessImpl<T> implements MealSuccess<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() mealLoading,
-    required TResult Function(Meal mealDetails) mealSuccess,
+    required TResult Function(Map<String, String?> mealDetails) mealSuccess,
     required TResult Function(String error) mealError,
   }) {
     return mealSuccess(mealDetails);
@@ -275,7 +282,7 @@ class _$MealSuccessImpl<T> implements MealSuccess<T> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? mealLoading,
-    TResult? Function(Meal mealDetails)? mealSuccess,
+    TResult? Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult? Function(String error)? mealError,
   }) {
     return mealSuccess?.call(mealDetails);
@@ -285,7 +292,7 @@ class _$MealSuccessImpl<T> implements MealSuccess<T> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? mealLoading,
-    TResult Function(Meal mealDetails)? mealSuccess,
+    TResult Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult Function(String error)? mealError,
     required TResult orElse(),
   }) {
@@ -331,9 +338,10 @@ class _$MealSuccessImpl<T> implements MealSuccess<T> {
 }
 
 abstract class MealSuccess<T> implements MealDetailsState<T> {
-  const factory MealSuccess(final Meal mealDetails) = _$MealSuccessImpl<T>;
+  const factory MealSuccess(final Map<String, String?> mealDetails) =
+      _$MealSuccessImpl<T>;
 
-  Meal get mealDetails;
+  Map<String, String?> get mealDetails;
 
   /// Create a copy of MealDetailsState
   /// with the given fields replaced by the non-null parameter values.
@@ -411,7 +419,7 @@ class _$MealErrorImpl<T> implements MealError<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() mealLoading,
-    required TResult Function(Meal mealDetails) mealSuccess,
+    required TResult Function(Map<String, String?> mealDetails) mealSuccess,
     required TResult Function(String error) mealError,
   }) {
     return mealError(error);
@@ -421,7 +429,7 @@ class _$MealErrorImpl<T> implements MealError<T> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? mealLoading,
-    TResult? Function(Meal mealDetails)? mealSuccess,
+    TResult? Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult? Function(String error)? mealError,
   }) {
     return mealError?.call(error);
@@ -431,7 +439,7 @@ class _$MealErrorImpl<T> implements MealError<T> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? mealLoading,
-    TResult Function(Meal mealDetails)? mealSuccess,
+    TResult Function(Map<String, String?> mealDetails)? mealSuccess,
     TResult Function(String error)? mealError,
     required TResult orElse(),
   }) {

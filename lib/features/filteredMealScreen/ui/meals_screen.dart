@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mealtracker/core/themes/text_style.dart';
 import 'package:mealtracker/features/filteredMealScreen/controller/cubit/filterd_meals_cubit.dart';
 import 'package:mealtracker/features/filteredMealScreen/controller/cubit/filterd_meals_state.dart';
